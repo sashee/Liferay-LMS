@@ -40,4 +40,8 @@
 		<module>lms-portlet</module>
 		<module>lms-portlet-service</module>
 	</modules>
+	<properties>
+		<liferay.version>6.1.0</liferay.version>
+		<liferay.auto.deploy.dir>/home/sashee/liferay-codecamp/liferay-portal-6.1.0-ce-ga1/deploy</liferay.auto.deploy.dir>
+	</properties>
 </project>
