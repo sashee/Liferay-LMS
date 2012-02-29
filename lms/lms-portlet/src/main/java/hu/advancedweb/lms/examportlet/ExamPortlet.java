@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.ActionRequest;
+import javax.portlet.RenderRequest;
 
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -57,17 +58,7 @@ public class ExamPortlet extends MVCPortlet {
         SessionMessages.add(request, "exampagevalidated");
         request.setAttribute("validationResponse", examValidationResponse);
         
-		Layout nextLayout = null;
-        
-        // TODO: ezt valami utilba kiemelni és jspből hívni, nem pedig itt beletenni, 
-        // hogy az oldal betoltesekor is lehessen vizsgálni, hogy az user számára megjelenhet-e a következő oldal
-        // sztem az alapján kellene kitenni a linket, hogy van-e joga a következő oldalt megnézni.
-        Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
-        int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
-        
-        if (nextPageIndex < parent.getChildren().size()) {
-			nextLayout = parent.getChildren().get(nextPageIndex);
-		}
+        Layout nextLayout = getNextPage(themeDisplay);
 
 		if (nextLayout != null) {
 			// usernek beeallitjuk a kovetkezo oldalra a megtekintesi jogosultsagot
@@ -94,18 +85,32 @@ public class ExamPortlet extends MVCPortlet {
 
 			}
 			UserLocalServiceUtil.addRoleUsers(existing.getPrimaryKey(), new long[] { user.getPrimaryKey() });
-
-			request.setAttribute("nextpage", nextLayout.getFriendlyURL());
         }
 
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static boolean canUserViewNextPage(RenderRequest request) throws SystemException, PortalException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
-	private String getRoleNameForLayout(Layout layout) {
-		return "ExamViewFor" + layout.getFriendlyURL().substring(layout.getFriendlyURL().lastIndexOf("/") + 1);
-	}
+		long userid = themeDisplay.getUser().getUserId();
+		long companyId = themeDisplay.getUser().getCompanyId();
+		
+		Layout layout = getNextPage(themeDisplay);
+		if (layout == null) {
+			return false;
+		}
+		
+		String roleName = getRoleNameForLayout(layout);
 
-	private boolean canUserViewNextPage(long companyId, long userid, Layout nextLayout) throws SystemException, PortalException {
-		String roleName = getRoleNameForLayout(nextLayout);
 		try {
 
 			Role existing = RoleLocalServiceUtil.getRole(companyId, roleName);
@@ -119,6 +124,30 @@ public class ExamPortlet extends MVCPortlet {
 
 		} catch (NoSuchRoleException nsre) {
 			return false;
+		}
+	}
+
+	public static String getNextPageUrl(RenderRequest request) throws SystemException, PortalException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+	
+		Layout nextPage = getNextPage(themeDisplay);
+		
+		return (nextPage == null) ? null : nextPage.getFriendlyURL();
+	}
+
+	private static String getRoleNameForLayout(Layout layout) {
+		return "ExamViewFor" + layout.getFriendlyURL().substring(layout.getFriendlyURL().lastIndexOf("/") + 1);
+	}
+	
+	private static Layout getNextPage(ThemeDisplay themeDisplay) throws PortalException, SystemException {
+		Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
+        int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
+        
+        if (nextPageIndex < parent.getChildren().size()) {
+			return parent.getChildren().get(nextPageIndex);
+		} else {
+			return null;
 		}
 	}
 }

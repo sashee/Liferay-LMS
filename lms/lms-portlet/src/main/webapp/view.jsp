@@ -42,9 +42,14 @@
 		}
 	%>
 	
-	<% 
-	String nextPageUrl = (String)request.getAttribute("nextpage");
-	if (nextPageUrl != null) { %>
-	<a href="<%= nextPageUrl %>">Következő oldal</a>
+	
+	<% if (ExamPortlet.canUserViewNextPage(renderRequest)) { %>
+	
+		<% 
+		String nextPageUrl = ExamPortlet.getNextPageUrl(renderRequest);
+		if (nextPageUrl != null) { %>
+		<a href="<%= nextPageUrl %>">Következő oldal</a>
+		<% } %>
+	
 	<% } %>
 </div> 

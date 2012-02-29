@@ -44,6 +44,7 @@
 <%@ page import="com.liferay.portal.model.Layout"%>
 <%@ page import="hu.advancedweb.PermissionTester" %>
 <%@ page import="hu.advancedweb.lms.examportlet.ExamValidationResponse" %>
+<%@ page import="hu.advancedweb.lms.examportlet.ExamPortlet" %>
 
 
 <portlet:defineObjects />
