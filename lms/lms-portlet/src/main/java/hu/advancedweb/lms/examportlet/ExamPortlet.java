@@ -8,6 +8,8 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import com.liferay.portal.NoSuchRoleException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -70,9 +72,7 @@ public class ExamPortlet extends MVCPortlet {
 		if (nextLayout != null) {
 			// usernek beeallitjuk a kovetkezo oldalra a megtekintesi jogosultsagot
 
-			System.err.println("name:" + nextLayout.getFriendlyURL().substring(nextLayout.getFriendlyURL().lastIndexOf("/") + 1));
-
-			String roleName = "ExamViewFor" + nextLayout.getFriendlyURL().substring(nextLayout.getFriendlyURL().lastIndexOf("/")+1);
+			String roleName = getRoleNameForLayout(nextLayout);
 
 			User user = themeDisplay.getUser();
 
@@ -99,4 +99,26 @@ public class ExamPortlet extends MVCPortlet {
         }
 
     }
+
+	private String getRoleNameForLayout(Layout layout) {
+		return "ExamViewFor" + layout.getFriendlyURL().substring(layout.getFriendlyURL().lastIndexOf("/") + 1);
+	}
+
+	private boolean canUserViewNextPage(long companyId, long userid, Layout nextLayout) throws SystemException, PortalException {
+		String roleName = getRoleNameForLayout(nextLayout);
+		try {
+
+			Role existing = RoleLocalServiceUtil.getRole(companyId, roleName);
+
+			for (Role r : RoleLocalServiceUtil.getUserRoles(userid)) {
+				if (r.getPrimaryKey() == existing.getPrimaryKey()) {
+					return true;
+				}
+			}
+			return false;
+
+		} catch (NoSuchRoleException nsre) {
+			return false;
+		}
+	}
 }
