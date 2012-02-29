@@ -13,11 +13,38 @@
  * details.
  */
 --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="/init.jsp"%>
 
-<%@page import="hu.advancedweb.PermissionTester"%>
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<liferay-ui:success key="exampagevalidated" message="exampagevalidated" />
 
-<portlet:defineObjects />
+<portlet:actionURL name="submitExamPage" var="actionUrl" />
 
-This is the <b>lms</b>.
-<% PermissionTester.test(request);%>
+<!-- Vizsga form.  -->
+<aui:form name="fm" action="<%= actionUrl.toString() %>" method="post">
+	<aui:fieldset>
+		Mennyi 2+3?
+		<aui:input name="answer" size="2" />
+		<aui:button-row>
+			<aui:button type="submit" name="submit"/>
+		</aui:button-row>
+	</aui:fieldset>
+</aui:form>
+
+<!-- Vizsga kiertekeles. -->
+<div style="background:lightBlue;">
+	<%
+		ExamValidationResponse examValidationResponse = (ExamValidationResponse)request.getAttribute("validationResponse");
+		if (examValidationResponse != null) { 
+	%>
+			<div style="color:red; border-bottom:1px solid black;"><%= examValidationResponse.getResponseText() %></div>
+	<%
+		}
+	%>
+	
+	<% 
+	String nextPageUrl = (String)request.getAttribute("nextpage");
+	if (nextPageUrl != null) { %>
+	<a href="<%= nextPageUrl %>">Következő oldal</a>
+	<% } %>
+</div> 

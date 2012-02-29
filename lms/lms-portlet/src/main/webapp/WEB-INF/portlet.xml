@@ -9,7 +9,8 @@
 	<portlet>
 		<portlet-name>lms</portlet-name>
 		<display-name>lms</display-name>
-		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
+		
+		<portlet-class>hu.advancedweb.lms.examportlet.ExamPortlet</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
 			<value>/view.jsp</value>
@@ -18,6 +19,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>lms</title>
 			<short-title>lms</short-title>
