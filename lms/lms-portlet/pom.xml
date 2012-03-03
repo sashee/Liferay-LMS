@@ -79,5 +79,10 @@
 			<version>1.2</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>rhino</groupId>
+			<artifactId>js</artifactId>
+			<version>1.7R2</version>
+		</dependency>
 	</dependencies>
 </project>

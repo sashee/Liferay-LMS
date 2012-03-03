@@ -42,7 +42,6 @@
 <%@ page import="com.liferay.portal.theme.ThemeDisplay"%>
 <%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.model.Layout"%>
-<%@ page import="hu.advancedweb.PermissionTester" %>
 <%@ page import="hu.advancedweb.lms.examportlet.ExamValidationResponse" %>
 <%@ page import="hu.advancedweb.lms.examportlet.ExamPortlet" %>
 
