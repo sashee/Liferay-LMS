@@ -2,11 +2,12 @@
 
 <service-builder package-path="hu.advancedweb">
 	<namespace>lms</namespace>
-	<entity name="Foo" uuid="true" local-service="true" remote-service="true">
+	<entity name="ExamConfig" uuid="false" local-service="true"
+		remote-service="false">
 
 		<!-- PK fields -->
 
-		<column name="fooId" type="long" primary="true" />
+		<column name="id" type="long" primary="true" />
 
 		<!-- Group instance -->
 
@@ -15,34 +16,33 @@
 		<!-- Audit fields -->
 
 		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
 
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
+		<column name="questions" type="String" />
+		<column name="evaluator" type="String" />
+	</entity>
 
-		<!-- Order -->
+	<entity name="ExamAnswer" uuid="false" local-service="true"
+		remote-service="false">
 
-		<order by="asc">
-			<order-column name="field1" />
-		</order>
+		<!-- PK fields -->
 
-		<!-- Finder methods -->
+		<column name="id" type="long" primary="true" />
 
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
-		</finder>
+		<!-- Group instance -->
 
-		<!-- References -->
+		<column name="groupId" type="long" />
 
-		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
-		<reference package-path="com.liferay.portlet.asset" entity="AssetTag" />
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="userId" type="Long" />
+		<column name="answers" type="String" />
+		<column name="date" type="Date" />
+		<column name="examConfigId" type="Long" />
 	</entity>
 </service-builder>
