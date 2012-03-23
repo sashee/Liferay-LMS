@@ -1,0 +1,1 @@
+Liferay.Service.register("Liferay.Service.lms", "hu.advancedweb.service", "lms-portlet");

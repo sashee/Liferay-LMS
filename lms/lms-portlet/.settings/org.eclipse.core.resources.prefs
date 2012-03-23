@@ -1,7 +1,9 @@
-#Wed Feb 29 13:19:33 CET 2012
+#Fri Mar 23 16:37:19 CET 2012
 eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
 encoding//src/main/java/content/Language.properties=UTF-8
 encoding//src/main/java/content/Language_hu.properties=UTF-8
 encoding//src/main/java/hu/advancedweb/lms/examportlet/ExamPortlet.java=UTF-8
+encoding//src/main/resources=UTF-8
 encoding//src/main/webapp/view.jsp=UTF-8
 encoding/<project>=UTF-8

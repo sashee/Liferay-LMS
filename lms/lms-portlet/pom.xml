@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
-		<groupId>hu.advancedweb</groupId>
-		<artifactId>lms</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>lms-portlet</artifactId>
@@ -18,19 +13,98 @@
 			<plugin>
 				<groupId>com.liferay.maven.plugins</groupId>
 				<artifactId>liferay-maven-plugin</artifactId>
-				<version>${liferay.version}</version>
+				<version>${liferay.plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.jackrabbit</groupId>
+						<artifactId>jackrabbit-core</artifactId>
+						<version>2.1.2</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jcl-over-slf4j</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
 				<configuration>
-					<apiBaseDir>${basedir}/../lms-portlet-service</apiBaseDir>
+					<apiDir>${basedir}/src/main/java</apiDir>
+					<pluginType>portlet</pluginType>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/WEB-INF</directory>
+							<followSymlinks>false</followSymlinks>
+							<includes>
+								<include>sql/</include>
+							</includes>
+							<excludes>
+								<exclude>*</exclude>
+							</excludes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.3.3</version>
+				<executions>
+					<execution>
+						<id>ReplaceServiceProperties</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>src/main/resources/service.properties</file>
+							<replacements>
+								<replacement>
+									<token>.*build.number=.*</token>
+									<value>build.number=${service.version}</value>
+								</replacement>
+								<replacement>
+									<token>build.auto.upgrade=true</token>
+									<value>build.auto.upgrade=false</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>service.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
 	</build>
 	<dependencies>
-		<dependency>
-			<groupId>hu.advancedweb</groupId>
-			<artifactId>lms-portlet-service</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.liferay.portal</groupId>
 			<artifactId>portal-service</artifactId>
@@ -85,4 +159,10 @@
 			<version>1.7R2</version>
 		</dependency>
 	</dependencies>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<liferay.version>6.1.0</liferay.version>
+		<liferay.plugin.version>6.1.0</liferay.plugin.version>
+		<service.version>1</service.version>
+	</properties>
 </project>

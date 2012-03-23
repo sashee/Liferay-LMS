@@ -2,9 +2,7 @@ package hu.advancedweb.lms.examportlet;
 
 
 /**
- * TODO
- * konténere a teszt kiértékelésének
- * dbben tároljuk majd, vagy mindig on the fly az aktuális oldal eredményét adjuk az usernek?
+ * TODO kontÃ©nere a teszt kiÃ©rtÃ©kelÃ©sÃ©nek dbben tÃ¡roljuk majd, vagy mindig on the fly az aktuÃ¡lis oldal eredmÃ©nyÃ©t adjuk az usernek?
  */
 public class ExamValidationResponse {
 	private String responseText;
