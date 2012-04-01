@@ -44,5 +44,11 @@
 		<column name="answers" type="String" />
 		<column name="date" type="Date" />
 		<column name="examConfigId" type="Long" />
+		<finder name="CompanyId_GroupId_UserId_ExamConfigId" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="groupId" />
+			<finder-column name="userId" />
+			<finder-column name="examConfigId" />
+		</finder>
 	</entity>
 </service-builder>

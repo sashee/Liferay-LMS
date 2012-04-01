@@ -1,6 +1,9 @@
 package hu.advancedweb.service.impl;
 
+import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.base.ExamConfigLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the exam config local service.
@@ -22,4 +25,15 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
      *
      * Never reference this interface directly. Always use {@link hu.advancedweb.service.ExamConfigLocalServiceUtil} to access the exam config local service.
      */
+
+	public ExamConfig createExamConfig(long companyId, long groupId, String questions, String evaluator) throws SystemException {
+		ExamConfig result = createExamConfig(counterLocalService.increment());
+		result.setCompanyId(companyId);
+		result.setGroupId(groupId);
+		result.setQuestions(questions);
+		result.setEvaluator(evaluator);
+		result = updateExamConfig(result);
+		return result;
+
+	}
 }

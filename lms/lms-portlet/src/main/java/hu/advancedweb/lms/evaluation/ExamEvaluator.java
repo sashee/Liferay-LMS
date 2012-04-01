@@ -1,6 +1,10 @@
 package hu.advancedweb.lms.evaluation;
 
+import hu.advancedweb.model.ExamAnswer;
+import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.pilot.rhino.ValidationBean;
+import hu.advancedweb.service.ExamAnswerLocalServiceUtil;
+import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,8 +18,12 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 
 public class ExamEvaluator {
 
@@ -29,7 +37,7 @@ public class ExamEvaluator {
 		System.out.println(result);
 	}
 
-	public static String appendAnswers(String oldAnswers, String pageName, Map<String, String> newAnswers) {
+	private static String appendAnswers(String oldAnswers, String pageName, Map<String, String> newAnswers) {
 		if (oldAnswers == null || oldAnswers.trim().compareTo("") == 0) {
 			oldAnswers = "{}";
 		}
@@ -38,7 +46,46 @@ public class ExamEvaluator {
 		return JSONObject.toJSONString(ans.answers);
 	}
 
-	public static String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
+	public static void appendAnswers(long companyId, long groupId, long userId, long examConfigId, String pageName, Map<String, String> newAnswers) throws SystemException {
+		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
+		answer.setAnswers(appendAnswers(answer.getAnswers(), pageName, newAnswers));
+		ExamAnswerLocalServiceUtil.updateExamAnswer(answer);
+	}
+
+	public static void createExamConfig(long companyId, long groupId, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws SystemException {
+		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
+
+		String evaluatorString = evaluator.isPresent() ? evaluator.get() : generateDefaultEvaluatorJavascript(evaluatorLogic.get());
+
+		String questions = JSONObject.toJSONString(test.tests);
+
+		ExamConfigLocalServiceUtil.createExamConfig(companyId, groupId, questions, evaluatorString);
+	}
+
+	public static void updateExamConfig(long id, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws PortalException, SystemException {
+		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
+
+		ExamConfig config = ExamConfigLocalServiceUtil.getExamConfig(id);
+
+		String evaluatorString = evaluator.isPresent() ? evaluator.get() : generateDefaultEvaluatorJavascript(evaluatorLogic.get());
+
+		String questions = JSONObject.toJSONString(test.tests);
+
+		config.setEvaluator(evaluatorString);
+		config.setQuestions(questions);
+
+		ExamConfigLocalServiceUtil.updateExamConfig(config);
+	}
+
+	public static ExamValidationResult evaluate(long companyId, long groupId, long userId, long examConfigId) throws PortalException, SystemException {
+		ExamConfig config = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
+
+		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
+
+		return evaluate(answer.getAnswers(), config.getEvaluator());
+	}
+
+	private static String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
 		StringBuilder result = new StringBuilder();
 
 		result.append("function validate(){");
@@ -53,7 +100,7 @@ public class ExamEvaluator {
 		return result.toString();
 	}
 
-	public ExamValidationResult evaluate(String answers, String evaluationLogic) {
+	private static ExamValidationResult evaluate(String answers, String evaluationLogic) {
 		Context cx = Context.enter();
 
 		try {
@@ -62,8 +109,8 @@ public class ExamEvaluator {
 			/*
 			 * Loads the helper js functions to the scope.
 			 */
-			Script javascriptFrameworkScript = Context.getCurrentContext().compileString(getJavascriptFramework(), "Framework Script", 1, null);
-			javascriptFrameworkScript.exec(cx, scope);
+			// Script javascriptFrameworkScript = Context.getCurrentContext().compileString(getJavascriptFramework(), "Framework Script", 1, null);
+			// javascriptFrameworkScript.exec(cx, scope);
 
 			/*
 			 * Loads the exam data object to the scope.
