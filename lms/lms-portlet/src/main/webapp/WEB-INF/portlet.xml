@@ -10,7 +10,7 @@
 		<portlet-name>lms</portlet-name>
 		<display-name>lms</display-name>
 		
-		<portlet-class>hu.advancedweb.lms.examportlet.ExamPortlet</portlet-class>
+		<portlet-class>hu.advancedweb.lms.portlet.ExamPortlet</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
 			<value>/view.jsp</value>

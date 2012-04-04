@@ -1,0 +1,13 @@
+.lmsConfiguration .examPages > div, .lmsConfiguration .examPage > div, .lmsConfiguration .examQuestion > div {
+	border: 1px solid #DADADA;
+	margin: 5px;
+	padding: 5px;
+}
+
+.lmsConfiguration .field-title {
+	font-weight: bold;
+}
+
+.lmsConfiguration .aui-undomanager {
+	display: none;
+}
