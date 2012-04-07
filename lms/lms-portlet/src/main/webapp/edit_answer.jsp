@@ -23,6 +23,8 @@
 		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
 		int questionIndex = GetterUtil.getInteger((String)request.getAttribute("lms-question-index-param"));
 		int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"))); 
+		
+		String fieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
 	<div class="field-title">
@@ -30,8 +32,8 @@
 	</div>
 	<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 	<div>
-		<aui:input name="title" type="text" value="" />
-		<aui:input name="key" type="text" value="" />
+		<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="" />
+		<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
 		<div style="clear: both;"></div>
 	</div>
 	<br /> <br />

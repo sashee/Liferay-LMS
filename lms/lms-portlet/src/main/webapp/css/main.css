@@ -20,3 +20,8 @@
 .lfr-form-row:hover .lfr-form-row:hover .lfr-form-row:hover {
   background-color: #99FFFF;
 }
+
+
+.lmsConfiguration .dummyContainer {
+	display: none;
+}

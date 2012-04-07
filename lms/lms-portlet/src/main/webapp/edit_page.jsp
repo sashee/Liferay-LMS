@@ -19,7 +19,6 @@
 <div class="aui-field-row field-row">
 	<% 
 		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"))); 
-// 		int pageIndex = GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"));
 	%>
 
 	<div class="field-title">
@@ -31,9 +30,8 @@
 	<div id="examPage<%=pageIndex%>">
 		<aui:fieldset cssClass="rows-container examPage">
 		
-			<div>
-				<aui:input name="title" type="text" value="" />
-				<aui:input name="key" type="text" value="" />
+			<div class="dummyContainer">
+				<aui:input name="questionsetdummy" type="text" value="" />
 				<div style="clear:both;"></div>
 			</div>
 		
@@ -49,7 +47,7 @@
 					request.setAttribute("configuration.jsp-questionindex", String.valueOf(questionIndex));
 					%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=questionIndex%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
 						</div>
@@ -60,7 +58,6 @@
 				}
 			%>
 		</aui:fieldset>
-		<br/>
 		<br/>
 		<br/>
 	</div>

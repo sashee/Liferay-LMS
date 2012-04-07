@@ -36,10 +36,9 @@
 	<liferay-ui:panel collapsible="<%= false %>" extended="<%= true %>" id="exam_fields" persistState="<%= true %>" title="form-fields">
 		<aui:fieldset cssClass="rows-container examPages">
 		
-			<div>
-				<aui:input name="title" type="text" value="" />
-				<aui:input name="key" type="text" value="" />
-				<div style="clear:both;"></div><!-- TODO: ezeket kiszedni -->
+			<div class="dummyContainer">
+				<aui:input name="pagesetdummy" type="text" value="" />
+				<div style="clear:both;"></div>
 			</div>
 		
 			<%
@@ -54,7 +53,7 @@
 					request.setAttribute("configuration.jsp-pageindex", String.valueOf(index));
 					%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=index%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
 						</div>
@@ -82,7 +81,7 @@
 		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
 	</liferay-portlet:renderURL>
 	
-	window.myautofields = new Liferay.AutoFields(
+	new Liferay.AutoFields(
 		{
 			contentBox: examPages,
 			fieldIndexes: '<portlet:namespace />pageFieldIndexes',

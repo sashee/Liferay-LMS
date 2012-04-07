@@ -31,6 +31,8 @@
 		if (request.getAttribute("lms-page-index-param") != null && !((String)request.getAttribute("lms-page-index-param")).isEmpty()) {
 			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
 		}
+		
+		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
 	<div class="field-title">
@@ -43,9 +45,17 @@
 		<aui:fieldset cssClass="rows-container examQuestion">
 		
 			<div>
-				<aui:input name="title" type="text" value="" />
-				<aui:input name="key" type="text" value="" />
+				<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="" />
+				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
 				<div style="clear:both;"></div>
+				<aui:select label="type" name='<%= "type" + fieldIdSuffix %>'>
+					<aui:option selected='<%= true %>' value="text"><liferay-ui:message key="text" /></aui:option>
+					<aui:option selected='<%= false %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
+					<aui:option selected='<%= false %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
+				</aui:select>
+				<aui:input label="answer" name='<%= "answer" + fieldIdSuffix %>' type="text" value="" />
+				<aui:input label="point" name='<%= "point" + fieldIdSuffix %>' type="text" value="" />
+				<div style="clear: both;"></div>
 			</div>
 		
 			<%
@@ -59,17 +69,19 @@
 				for (int answerFieldIndex : answerFieldIndexes) {
 					request.setAttribute("configuration.jsp-answerindex", String.valueOf(answerIndex));
 					request.setAttribute("configuration.jsp-answerFieldIndex", String.valueOf(answerFieldIndex));
+					
+					String answerFieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
 					%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=answerFieldIndex%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerFieldIndex%>">
 						<div class="row-fields">
 							<div class="field-title">
 								<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
 							</div>
 							<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 							<div>
-								<aui:input name="title" type="text" value="" />
-								<aui:input name="key" type="text" value="" />
+								<aui:input label="title" name='<%= "title" + answerFieldIdSuffix %>' type="text" value="" />
+								<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="" />
 								<div style="clear:both;"></div>
 							</div>
 							<br/>
