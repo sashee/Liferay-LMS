@@ -17,16 +17,18 @@
 <%@ include file="/init.jsp" %>
 
 <div class="aui-field-row field-row">
-
 	<% 
-		int index = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-index"))); 
+		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"))); 
+// 		int pageIndex = GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"));
 	%>
 
 	<div class="field-title">
-		<span class="field-label">Page <%=index%></span>
+		<span class="field-label">Page <%=pageIndex%></span>
 	</div>
 	
-	<div id="examPage<%=index%>"> <!-- TODO: id beállítása hasonlóan a fieldsethez -->
+	<aui:input type="hidden" name='<%= "_field" + pageIndex %>' />
+	
+	<div id="examPage<%=pageIndex%>">
 		<aui:fieldset cssClass="rows-container examPage">
 		
 			<div>
@@ -45,10 +47,9 @@
 				int questionIndex = 1;
 				for (int questionFieldIndex : questionFieldIndexes) {
 					request.setAttribute("configuration.jsp-questionindex", String.valueOf(questionIndex));
-					request.setAttribute("configuration.jsp-questionFieldIndex", String.valueOf(questionFieldIndex));
 					%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=questionFieldIndex%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=questionIndex%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
 						</div>
@@ -57,28 +58,29 @@
 					<%
 					questionIndex++;
 				}
-				%>
+			%>
 		</aui:fieldset>
 		<br/>
 		<br/>
 		<br/>
 	</div>
-	
-	
 </div>
 
 
 <aui:script use="aui-base,liferay-auto-fields">
-	var examPage = A.one('#examPage<%=index%>');
+	var examPage = A.one('#examPage<%=pageIndex%>');
+	
+	<% String pageIndexString = pageIndex + ""; %>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="<%= Constants.CMD %>" value="add_question" /> <!-- TODO: ExamConstants-ba kivinni -->
+		<portlet:param name="page-index" value="<%=pageIndexString%>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(
 		{
 			contentBox: examPage,
-			fieldIndexes: '<portlet:namespace />answerFieldIndexes',
+			fieldIndexes: '<portlet:namespace />questionFieldIndexes_p<%=pageIndex%>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'

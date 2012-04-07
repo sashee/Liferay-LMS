@@ -19,15 +19,27 @@
 <div class="aui-field-row field-row">
 
 	<% 
-		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-index"))); 
-		int index = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"))); 
+		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"))); 
+		
+		int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"))); 
+		int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"));
+		
+		if (questionIndexParam != 0) {
+			questionIndex = questionIndexParam;
+		}
+		
+		if (request.getAttribute("lms-page-index-param") != null && !((String)request.getAttribute("lms-page-index-param")).isEmpty()) {
+			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
+		}
 	%>
 
 	<div class="field-title">
-		<span class="field-label">Question <%=index%> of <%= parentPageIndex %></span>
+		<span class="field-label">Question <%=questionIndex%> of <%= parentPageIndex %></span>
 	</div>
 	
-	<div id="examQuestion<%=index%>">
+	<aui:input type="hidden" name='<%= "_field" + questionIndex %>' />
+	
+	<div id="examQuestion<%=questionIndex%>">
 		<aui:fieldset cssClass="rows-container examQuestion">
 		
 			<div>
@@ -39,9 +51,9 @@
 			<%
 				// TODO: valódi content indexek
 				int[] answerFieldIndexes = new int[3];
-				 answerFieldIndexes[0] = 0;
-				 answerFieldIndexes[1] = 1;
-				 answerFieldIndexes[2] = 2;
+				answerFieldIndexes[0] = 0;
+				answerFieldIndexes[1] = 1;
+				answerFieldIndexes[2] = 2;
 	
 				int answerIndex = 1;
 				for (int answerFieldIndex : answerFieldIndexes) {
@@ -52,8 +64,9 @@
 					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=answerFieldIndex%>">
 						<div class="row-fields">
 							<div class="field-title">
-								<span class="field-label">Answer <%=answerIndex%></span>
+								<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
 							</div>
+							<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 							<div>
 								<aui:input name="title" type="text" value="" />
 								<aui:input name="key" type="text" value="" />
@@ -72,22 +85,26 @@
 		<br/>
 		<br/>
 	</div>
-	
-	
 </div>
 
 
 <aui:script use="aui-base,liferay-auto-fields">
-	var examQuestion = A.one('#examPage<%=parentPageIndex%> #examQuestion<%=index%>');
+	
+	var examQuestion = A.one('#examPage<%=parentPageIndex%> #examQuestion<%=questionIndex%>');
+	
+	<% String pageIndexString = parentPageIndex + ""; %>
+	<% String questionIndexString = questionIndex + ""; %>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="<%= Constants.CMD %>" value="add_answer" /> <!-- TODO: ExamConstants-ba kivinni -->
+		<portlet:param name="page-index" value="<%=pageIndexString%>" />
+		<portlet:param name="question-index" value="<%=questionIndexString%>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(
 		{
 			contentBox: examQuestion,
-			fieldIndexes: '<portlet:namespace />questionFieldIndexes',
+			fieldIndexes: '<portlet:namespace />answerFieldIndexes_p<%=parentPageIndex%>_q<%=questionIndex%>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'

@@ -51,12 +51,10 @@
 
 				int index = 1;
 				for (int formFieldsIndex : formFieldsIndexes) {
-					request.setAttribute("configuration.jsp-index", String.valueOf(index));
-					request.setAttribute("configuration.jsp-formFieldsIndex", String.valueOf(formFieldsIndex));
-					request.setAttribute("configuration.jsp-fieldsEditingDisabled", "true");
+					request.setAttribute("configuration.jsp-pageindex", String.valueOf(index));
 					%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=formFieldsIndex%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%=index%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
 						</div>
@@ -84,10 +82,10 @@
 		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
 	</liferay-portlet:renderURL>
 	
-	new Liferay.AutoFields(
+	window.myautofields = new Liferay.AutoFields(
 		{
 			contentBox: examPages,
-			fieldIndexes: '<portlet:namespace />formFieldsIndexes',
+			fieldIndexes: '<portlet:namespace />pageFieldIndexes',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editFieldURL %>'

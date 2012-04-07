@@ -11,3 +11,12 @@
 .lmsConfiguration .aui-undomanager {
 	display: none;
 }
+
+
+.lfr-form-row:hover .lfr-form-row:hover {
+  background-color: #FFFF66;
+}
+
+.lfr-form-row:hover .lfr-form-row:hover .lfr-form-row:hover {
+  background-color: #99FFFF;
+}

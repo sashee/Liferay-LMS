@@ -37,6 +37,19 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 
 	public String render(PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
 		String cmd = ParamUtil.getString(renderRequest, "cmd");
+		System.out.println(" -- >  " + cmd);
+		
+		String pageIndexParam = ParamUtil.getString(renderRequest, "page-index");
+		
+		if (pageIndexParam != null) {
+			renderRequest.setAttribute("lms-page-index-param", pageIndexParam + "");
+		}
+		
+		String questionIndexParam = ParamUtil.getString(renderRequest, "question-index");
+		
+		if (questionIndexParam != null) {
+			renderRequest.setAttribute("lms-question-index-param", questionIndexParam + "");
+		}
 		
 		if (cmd.equals("add")) {
 			return "/edit_page.jsp";
