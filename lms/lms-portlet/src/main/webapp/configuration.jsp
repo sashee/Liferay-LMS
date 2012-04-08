@@ -17,8 +17,6 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	String redirect = ParamUtil.getString(renderRequest, "redirect");
-
 	String titleXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "title");
 	String descriptionXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "description");
 %>
@@ -26,23 +24,31 @@
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	
 	<aui:select label="id" name='exam_config_id'>
-		<aui:option selected='<%= true %>' value="text"><liferay-ui:message key="new" /></aui:option>
+	
+		<!-- TODO: valódi contentek -->
+		<aui:option selected='<%= true %>' value="new"><liferay-ui:message key="new" /></aui:option>
 		<aui:option selected='<%= false %>' value="1">1</aui:option>
 		<aui:option selected='<%= false %>' value="2">2</aui:option>
 	</aui:select>
-
+	<%
+		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('change-exam');";
+	%>
+	<aui:button value="change" type="submit" name="change_exam_config" onClick='<%= changeSubmitScript %>'/> 
+	<br /> <br />
+	
 	<liferay-ui:panel collapsible="<%= false %>" extended="<%= true %>" id="exam_fields" persistState="<%= true %>" title="form-fields">
 		<aui:fieldset cssClass="rows-container examPages">
-		
 			<div class="dummyContainer">
 				<aui:input name="pagesetdummy" type="text" value="" />
 				<div style="clear:both;"></div>
 			</div>
 		
 			<%
-				// TODO: valódi content indexek
+				// TODO: valódi contentek. nem int tömb, hanem Page tömb. Lehet, hogy magát a paget is át kéne adni valahogy a köv oldalnak.
+				// TODO: másik ág: nincs page, ekkor 1et azért be kell tenni
 				int[] formFieldsIndexes = new int[3];
 				formFieldsIndexes[0] = 0;
 				formFieldsIndexes[1] = 1;
@@ -67,7 +73,13 @@
 	</liferay-ui:panel>
 	
 	<aui:button-row>
-		<aui:input type="checkbox" name="generate_evaluation_logic" label="autogenerate-code"/>
+		<%
+			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
+		%>
+		<aui:input type="checkbox" name="generate_evaluation_logic" label="autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
+		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
+			<aui:input type="textarea" name="evaluation_logic_script" label="code" />
+		</div>
 		<aui:button type="submit" /> 
 	</aui:button-row>
 </aui:form>
@@ -90,6 +102,24 @@
 			url: '<%= editFieldURL %>'
 		}
 	).render();
+</aui:script>
+
+<aui:script>
+	function <portlet:namespace />setSubmitModeAndSubmit(mode) {
+		if (!mode) {
+			 throw "LMS Config: setSubmitModeAndSubmit, no mode set.";
+		}
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = mode;
+		submitForm(document.<portlet:namespace />fm, '<%= configurationURL.toString() %>');
+	}
+	
+	function <portlet:namespace />changeScriptBoxVisibility(hide) {
+		if (hide) {
+			document.getElementById('<portlet:namespace/>evaluation_logic_script').style.display = "none";
+		} else {
+			document.getElementById('<portlet:namespace/>evaluation_logic_script').style.display = "block";
+		}
+	}
 
 </aui:script>
 

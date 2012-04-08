@@ -18,7 +18,6 @@
 <%@ include file="/init.jsp"%>
 
 <div class="aui-field-row field-row">
-
 	<%
 		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
 		int questionIndex = GetterUtil.getInteger((String)request.getAttribute("lms-question-index-param"));
@@ -36,8 +35,6 @@
 		<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
 		<div style="clear: both;"></div>
 	</div>
-	<br /> <br />
-
 </div>
 
 

@@ -59,7 +59,6 @@
 			%>
 		</aui:fieldset>
 		<br/>
-		<br/>
 	</div>
 </div>
 

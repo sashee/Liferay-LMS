@@ -84,8 +84,6 @@
 								<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="" />
 								<div style="clear:both;"></div>
 							</div>
-							<br/>
-							<br/>						
 						</div>
 					</div>
 					
