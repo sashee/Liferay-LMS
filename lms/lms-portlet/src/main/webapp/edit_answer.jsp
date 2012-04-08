@@ -19,9 +19,9 @@
 
 <div class="aui-field-row field-row">
 	<%
-		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
-		int questionIndex = GetterUtil.getInteger((String)request.getAttribute("lms-question-index-param"));
-		int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"))); 
+		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX));
+		int questionIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_QUESTION_INDEX));
+		int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
 		
 		String fieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
 	%>

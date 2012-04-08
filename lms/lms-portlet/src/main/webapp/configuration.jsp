@@ -14,27 +14,33 @@
  */
 --%>
 
+<%@page import="java.util.HashSet"%>
 <%@ include file="/init.jsp" %>
-
-<%
-	String titleXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "title");
-	String descriptionXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "description");
-%>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= ConfigConstants.CMD_UPDATE %>" />
 	
-	<aui:select label="id" name='exam_config_id'>
+	<aui:select label="id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
 	
-		<!-- TODO: valódi contentek -->
-		<aui:option selected='<%= true %>' value="new"><liferay-ui:message key="new" /></aui:option>
-		<aui:option selected='<%= false %>' value="1">1</aui:option>
-		<aui:option selected='<%= false %>' value="2">2</aui:option>
+		<%
+			long examConfigId = GetterUtil.getLong(request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
+		%>
+		
+		<aui:option selected='<%= examConfigId == -1 %>' value="new"><liferay-ui:message key="new" /></aui:option>
+		
+		<%
+			List<Long> examConfigIds = (List<Long>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS);
+			for(long id : examConfigIds) {
+				%>
+					<aui:option selected='<%= examConfigId == id %>' value="<%= id %>"><%= id %></aui:option>
+				<%
+			}
+		%>
 	</aui:select>
 	<%
-		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('change-exam');";
+		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('" + ConfigConstants.CMD_CHANGE_EXAM + "');";
 	%>
 	<aui:button value="change" type="submit" name="change_exam_config" onClick='<%= changeSubmitScript %>'/> 
 	<br /> <br />
@@ -47,24 +53,39 @@
 			</div>
 		
 			<%
-				// TODO: valódi contentek. nem int tömb, hanem Page tömb. Lehet, hogy magát a paget is át kéne adni valahogy a köv oldalnak.
-				// TODO: másik ág: nincs page, ekkor 1et azért be kell tenni
-				int[] formFieldsIndexes = new int[3];
-				formFieldsIndexes[0] = 0;
-				formFieldsIndexes[1] = 1;
-				formFieldsIndexes[2] = 2;
-
+				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+				
+				Set<String> pageKeys;
+				
+				if (examConfigIds != null) {
+					pageKeys = examConfigIds.tests.keySet();
+				} else {
+					pageKeys = new HashSet<String>();
+				}
+			
 				int index = 1;
-				for (int formFieldsIndex : formFieldsIndexes) {
-					request.setAttribute("configuration.jsp-pageindex", String.valueOf(index));
+				if (!pageKeys.isEmpty()) {
+					for (String pageKey : pageKeys) {
+						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
+						%>
+						
+						<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
+							<div class="row-fields">
+								<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
+							</div>
+						</div>
+						
+						<%
+						index++;
+					}
+				} else {
+					request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
 					%>
-					
 					<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
 						</div>
 					</div>
-					
 					<%
 					index++;
 				}
@@ -90,7 +111,7 @@
 	var examPages = A.one('.examPages');
 
 	<liferay-portlet:renderURL portletConfiguration="true" var="editFieldURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_PAGE %>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(

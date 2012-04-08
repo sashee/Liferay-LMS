@@ -18,7 +18,7 @@
 
 <div class="aui-field-row field-row">
 	<% 
-		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"))); 
+		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
 	%>
 
 	<div class="field-title">
@@ -36,15 +36,37 @@
 			</div>
 		
 			<%
-				// TODO: valódi content indexek
-				int[] questionFieldIndexes = new int[3];
-				questionFieldIndexes[0] = 0;
-				questionFieldIndexes[1] = 1;
-				questionFieldIndexes[2] = 2;
-	
+				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+				Set<String> questionKeys = new HashSet<String>();
+				Map<String, ? extends List<String>> questions = new HashMap<String, List<String>>();
+				
+				if (examConfigIds != null) {
+					questions = examConfigIds.tests.get(pageIndex + "");
+					if (questions != null) {
+						questionKeys = questions.keySet();
+					}
+				}
+			
+				
 				int questionIndex = 1;
-				for (int questionFieldIndex : questionFieldIndexes) {
-					request.setAttribute("configuration.jsp-questionindex", String.valueOf(questionIndex));
+				
+				if (!questionKeys.isEmpty()) {
+					for (String questionKey : questionKeys) {
+						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
+						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONDATA, questions.get(questionKey));
+						%>
+						
+						<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
+							<div class="row-fields">
+								<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
+							</div>
+						</div>
+						
+						<%
+						questionIndex++;
+					}
+				} else {
+					request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
 					%>
 					
 					<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
@@ -64,13 +86,13 @@
 
 
 <aui:script use="aui-base,liferay-auto-fields">
-	var examPage = A.one('#examPage<%=pageIndex%>');
+	var examPage = A.one('#examPage<%= pageIndex %>');
 	
 	<% String pageIndexString = pageIndex + ""; %>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="add_question" /> <!-- TODO: ExamConstants-ba kivinni -->
-		<portlet:param name="page-index" value="<%=pageIndexString%>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_QUESTION %>" />
+		<portlet:param name="<%= ConfigConstants.CP_PAGE_INDEX %>" value="<%= pageIndexString %>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(

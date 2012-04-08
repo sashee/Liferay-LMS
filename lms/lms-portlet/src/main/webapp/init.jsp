@@ -24,6 +24,10 @@
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Set"%>
+<%@ page import="java.util.HashSet"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="javax.portlet.PortletURL" %>
@@ -53,13 +57,15 @@
 
 <%@ page import="hu.advancedweb.lms.portlet.ExamValidationResponse" %>
 <%@ page import="hu.advancedweb.lms.portlet.ExamPortlet" %>
+<%@ page import="hu.advancedweb.lms.portlet.ConfigConstants" %>
+<%@ page import="hu.advancedweb.lms.evaluation.ExamTest" %>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
 
 <%
 	String currentURL = PortalUtil.getCurrentURL(request);
-	
+		 
 	PortletPreferences preferences = null;
 	
 	if (renderRequest != null) {

@@ -14,22 +14,32 @@
  */
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashSet"%>
 <%@ include file="/init.jsp" %>
 
 <div class="aui-field-row field-row">
 
-	<% 
-		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-pageindex"))); 
-		
-		int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"))); 
-		int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-questionindex"));
-		
+	<% 	
+		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
+		int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
+		int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX));
+
 		if (questionIndexParam != 0) {
 			questionIndex = questionIndexParam;
 		}
 		
-		if (request.getAttribute("lms-page-index-param") != null && !((String)request.getAttribute("lms-page-index-param")).isEmpty()) {
-			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute("lms-page-index-param"));
+		if (request.getAttribute(ConfigConstants.RA_PAGE_INDEX) != null && !((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX)).isEmpty()) {
+			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX));
+		}
+		
+		List<String> questionData = (List<String>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONDATA);
+		if (questionData == null) {
+			questionData = new ArrayList<String>();
+			questionData.add("");
+			questionData.add("");
+			questionData.add("");
+			questionData.add("");
 		}
 		
 		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
@@ -45,13 +55,13 @@
 		<aui:fieldset cssClass="rows-container examQuestion">
 		
 			<div>
-				<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="" />
+				<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="<%= questionData.get(1) %>" />
 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
 				<div style="clear:both;"></div>
 				<aui:select label="type" name='<%= "type" + fieldIdSuffix %>'>
-					<aui:option selected='<%= true %>' value="text"><liferay-ui:message key="text" /></aui:option>
-					<aui:option selected='<%= false %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
-					<aui:option selected='<%= false %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
+					<aui:option selected='<%= questionData.get(1).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
+					<aui:option selected='<%= questionData.get(1).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
+					<aui:option selected='<%= questionData.get(1).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
 				<aui:input label="answer" name='<%= "answer" + fieldIdSuffix %>' type="text" value="" />
 				<aui:input label="point" name='<%= "point" + fieldIdSuffix %>' type="text" value="" />
@@ -59,26 +69,43 @@
 			</div>
 		
 			<%
-				// TODO: valódi content indexek
-				int[] answerFieldIndexes = new int[3];
-				answerFieldIndexes[0] = 0;
-				answerFieldIndexes[1] = 1;
-				answerFieldIndexes[2] = 2;
-	
-				int answerIndex = 1;
-				for (int answerFieldIndex : answerFieldIndexes) {
-					request.setAttribute("configuration.jsp-answerindex", String.valueOf(answerIndex));
-					request.setAttribute("configuration.jsp-answerFieldIndex", String.valueOf(answerFieldIndex));
-					
-					String answerFieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
+				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+				
+				String[] answerKeys = questionData.get(2).split(",");
+				String[] answerTitle = questionData.get(3).split(",");
+				
+				
+				if (!questionData.get(2).isEmpty()) {
+					for (int answerIndex = 1; answerIndex < answerKeys.length; answerIndex++) {
+	// 					request.setAttribute("configuration.jsp-answerindex", String.valueOf(answerIndex)); // TODO: kell ez?
+	// 					request.setAttribute("configuration.jsp-answerFieldIndex", String.valueOf(answerFieldIndex)); // TODO: kell ez?
+						
+						String answerFieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
+						%>
+						<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerIndex%>">
+							<div class="row-fields">
+								<div class="field-title">
+									<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
+								</div>
+								<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
+								<div>
+									<aui:input label="title" name='<%= "title" + answerFieldIdSuffix %>' type="text" value="<%= answerTitle[answerIndex] %>" />
+									<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="<%= answerKeys[answerIndex] %>" />
+									<div style="clear:both;"></div>
+								</div>
+							</div>
+						</div>
+						<%
+					}
+				} else {
+					String answerFieldIdSuffix = "_a" + 1 + "_p" + parentPageIndex + "_q" + questionIndex;
 					%>
-					
-					<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerFieldIndex%>">
+					<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=1%>">
 						<div class="row-fields">
 							<div class="field-title">
-								<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
+								<span class="field-label">Answer <%=1%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
 							</div>
-							<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
+							<aui:input type="hidden" name='<%= "_field" + 1  %>' />
 							<div>
 								<aui:input label="title" name='<%= "title" + answerFieldIdSuffix %>' type="text" value="" />
 								<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="" />
@@ -86,9 +113,7 @@
 							</div>
 						</div>
 					</div>
-					
 					<%
-					answerIndex++;
 				}
 				%> 
 		</aui:fieldset>
@@ -106,9 +131,9 @@
 	<% String questionIndexString = questionIndex + ""; %>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="add_answer" /> <!-- TODO: ExamConstants-ba kivinni -->
-		<portlet:param name="page-index" value="<%=pageIndexString%>" />
-		<portlet:param name="question-index" value="<%=questionIndexString%>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_ANSWER %>" />
+		<portlet:param name="<%= ConfigConstants.CP_PAGE_INDEX %>" value="<%=pageIndexString%>" />
+		<portlet:param name="<%= ConfigConstants.CP_QUESTION_INDEX %>" value="<%=questionIndexString%>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(
