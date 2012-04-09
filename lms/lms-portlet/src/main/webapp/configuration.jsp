@@ -18,9 +18,12 @@
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
+<liferay-portlet:renderURL portletConfiguration="true" var="redirectAfterUrl" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+</liferay-portlet:renderURL>
+
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= ConfigConstants.CMD_UPDATE %>" />
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirectAfterUrl %>" />
 	
 	<aui:select label="id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
 	
@@ -97,9 +100,9 @@
 		<%
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
 		%>
-		<aui:input type="checkbox" name="generate_evaluation_logic" label="autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
+		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
 		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
-			<aui:input type="textarea" name="evaluation_logic_script" label="code" />
+			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="code" />
 		</div>
 		<aui:button type="submit" /> 
 	</aui:button-row>

@@ -26,6 +26,10 @@ public class ConfigConstants {
 	
 	public static final String QP_PAGE_FIELD_INDEXES = "pageFieldIndexes";
 	
+	public static final String QP_GENERATE_EVALUATOR_LOGIC = "generate_evaluator_logic";
+	
+	public static final String QP_GENERATE_EVALUATOR_SCRIPT = "generate_evaluator_script";
+	
 	public static final String QP_FRAGMENT_QUESTION_FIELD_INDEXES = "questionFieldIndexes";
 	public static String getQuestionFieldIndexName(int pageIndex) {
 		return QP_FRAGMENT_QUESTION_FIELD_INDEXES + "_p" + pageIndex;
@@ -54,6 +58,16 @@ public class ConfigConstants {
 	public static final String QP_FRAGMENT_ANSWER_KEY = "key";
 	public static String getAnswerKeyName(int pageIndex, int questionIndex, int answerIndex) {
 		return QP_FRAGMENT_ANSWER_KEY + "_a" + answerIndex + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_QUESTION_ANSWER = "answer";
+	public static String getQuestionAnswerName(int pageIndex, int questionIndex) {
+		return QP_FRAGMENT_QUESTION_ANSWER + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_QUESTION_SCORE = "score";
+	public static String getQuestionScoreName(int pageIndex, int questionIndex) {
+		return QP_FRAGMENT_QUESTION_SCORE + "_p" + pageIndex + "_q" + questionIndex;
 	}
 	
 }

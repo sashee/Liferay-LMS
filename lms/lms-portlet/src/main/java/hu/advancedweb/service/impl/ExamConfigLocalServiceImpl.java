@@ -33,6 +33,7 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		result.setQuestions(questions);
 		result.setEvaluator(evaluator);
 		result = updateExamConfig(result);
+		examConfigPersistence.clearCache();
 		return result;
 
 	}

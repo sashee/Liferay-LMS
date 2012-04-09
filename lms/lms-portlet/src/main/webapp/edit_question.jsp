@@ -63,8 +63,8 @@
 					<aui:option selected='<%= questionData.get(0).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
-				<aui:input label="answer" name='<%= "answer" + fieldIdSuffix %>' type="text" value="" />
-				<aui:input label="point" name='<%= "point" + fieldIdSuffix %>' type="text" value="" />
+				<aui:input label="answer" name='<%= ConfigConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="" />
+				<aui:input label="point" name='<%= ConfigConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' type="text" value="" />
 				<div style="clear: both;"></div>
 			</div>
 		

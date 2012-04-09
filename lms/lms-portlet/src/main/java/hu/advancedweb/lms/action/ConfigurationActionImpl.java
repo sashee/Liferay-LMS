@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -52,10 +53,21 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		} else if (cmd.equals(ConfigConstants.CMD_UPDATE)) {
 			// Create or update Exam Config
 			ExamTest examTest = new ExamTest();
-			fillExamTest(examTest, actionRequest);
+			DefaultExamEvaluatorLogic examEvaluatorLogic = new DefaultExamEvaluatorLogic();
+			String evaluatorScriptText = actionRequest.getParameter(ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT);
+			String evaluatorLogicAutogenerate = actionRequest.getParameter(ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC);
 			
-			Optional<String> evaluator = Optional.of(""); // TODO
-			Optional<DefaultExamEvaluatorLogic> evaluatorLogic = Optional.absent(); // TODO
+			fillExamTest(examTest, examEvaluatorLogic, actionRequest);
+			
+			Optional<String> evaluator = Optional.absent();
+			Optional<DefaultExamEvaluatorLogic> evaluatorLogic = Optional.absent();
+			
+			if (evaluatorLogicAutogenerate.equalsIgnoreCase("true")) {
+				System.out.println("GENERATING");
+				evaluatorLogic = Optional.of(examEvaluatorLogic);
+			} else {
+				evaluator = Optional.of(evaluatorScriptText);
+			}
 			
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
 			
@@ -95,13 +107,14 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 //		}
 		
 		preferences.store();
+		
 		super.processAction(portletConfig, actionRequest, actionResponse);
 	}
 
 	public String render(PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
 		
 		// Portlet preferences
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest); // getOriginalServletRequest
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
 		PortletPreferences preferences = null;
 		if (renderRequest != null) {
 			preferences = renderRequest.getPreferences();
@@ -143,7 +156,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			boolean examConfigIdFound = false;
 			
 			//  Exam configs
-			List<ExamConfig> examConfigs = ExamConfigLocalServiceUtil.getExamConfigs(0, ExamConfigLocalServiceUtil.getExamConfigsCount());
+			List<ExamConfig> examConfigs = ExamConfigLocalServiceUtil.getExamConfigs(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			
 			List<Long> examConfigIds = new ArrayList<Long>();
 			for (ExamConfig examConfig : examConfigs) {
 				if (examConfig.getId() == examConfigId) {
@@ -168,39 +182,43 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		}
 	}
 	
-	private void fillExamTest(ExamTest examTest, ActionRequest actionRequest) {
+	private void fillExamTest(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest) {
 		String[] pageFieldIndexes = actionRequest.getParameter(ConfigConstants.QP_PAGE_FIELD_INDEXES).split(",");
 		
+		int targetPageNum = 1;
 		for (String pageFieldIndex : pageFieldIndexes) {
 			int pageNum = Integer.parseInt(pageFieldIndex);
 			
 			Map<String, List<String>> value = Maps.newLinkedHashMap();
-			examTest.tests.put(pageFieldIndex, value);
+			examTest.tests.put(targetPageNum + "", value);
 			
-			addPage(examTest, actionRequest, pageNum);
+			addPage(examTest, examEvaluatorLogic, actionRequest, pageNum, targetPageNum);
+			targetPageNum ++;
 		}
 	}
 	
-	private void addPage(ExamTest examTest, ActionRequest actionRequest, int pageNum) {
+	private void addPage(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest, int pageNum, int targetPageNum) {
 		String[] questionFieldIndexes = actionRequest.getParameter(ConfigConstants.getQuestionFieldIndexName(pageNum)).split(",");
 		
+		int targetQuestionNum = 1;
 		for (String questionFieldIndex : questionFieldIndexes) {
 			int questionIndex = Integer.parseInt(questionFieldIndex);
 			
 			List<String> value = new ArrayList<String>();
-			examTest.tests.get(pageNum + "").put(questionFieldIndex, value);
+			examTest.tests.get(targetPageNum + "").put(targetQuestionNum + "", value);
 			
-			addQuestion(examTest, actionRequest, pageNum, questionIndex);
+			addQuestion(examTest, examEvaluatorLogic, actionRequest, pageNum, questionIndex, targetPageNum, targetQuestionNum);
+			targetQuestionNum ++;
 		}
 	}
 	
-	private void addQuestion(ExamTest examTest, ActionRequest actionRequest, int pageNum, int questionNum) {
+	private void addQuestion(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest, int pageNum, int questionNum, int targetPageNum, int targetQuestionNum) {
 		
 		// question data
 		String questionType = actionRequest.getParameter(ConfigConstants.getQuestionTypeName(pageNum, questionNum));
 		String questionTitle = actionRequest.getParameter(ConfigConstants.getQuestionTitleName(pageNum, questionNum));
 		
-		List<String> questionData = examTest.tests.get(pageNum + "").get(questionNum + "");
+		List<String> questionData = examTest.tests.get(targetPageNum + "").get(targetQuestionNum + "");
 		questionData.add(questionType);
 		questionData.add(questionTitle);
 		
@@ -223,5 +241,17 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		}
 		questionData.add(keyBuffer.toString().substring(1));
 		questionData.add(titleBuffer.toString().substring(1));
+		
+		String questionScore = actionRequest.getParameter(ConfigConstants.getQuestionScoreName(pageNum, questionNum));
+		String questionAnswer = actionRequest.getParameter(ConfigConstants.getQuestionAnswerName(pageNum, questionNum));
+		
+		int score = 0;
+		try {
+			score = Integer.parseInt(questionScore);
+		} catch (Exception e) {
+			// Do nothing.
+		}
+		
+		examEvaluatorLogic.addCorrectAnswer(targetPageNum + "", targetQuestionNum + "", questionAnswer, score);
 	}
 }
