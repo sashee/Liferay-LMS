@@ -25,6 +25,12 @@
 			<short-title>lms</short-title>
 			<keywords>lms</keywords>
 		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>examconfigid</name>
+				<value>-1</value>
+			</preference>
+		</portlet-preferences>
 		<security-role-ref>
 			<role-name>administrator</role-name>
 		</security-role-ref>

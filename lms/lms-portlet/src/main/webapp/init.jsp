@@ -66,6 +66,8 @@
 <%
 	String currentURL = PortalUtil.getCurrentURL(request);
 		 
+	String redirect = ParamUtil.getString(renderRequest, "redirect");
+		 
 	PortletPreferences preferences = null;
 	
 	if (renderRequest != null) {

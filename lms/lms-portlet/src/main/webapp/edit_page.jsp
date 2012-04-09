@@ -98,7 +98,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examPage,
-			fieldIndexes: '<portlet:namespace />questionFieldIndexes_p<%=pageIndex%>',
+			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.getQuestionFieldIndexName(pageIndex) %>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'

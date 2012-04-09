@@ -55,13 +55,13 @@
 		<aui:fieldset cssClass="rows-container examQuestion">
 		
 			<div>
-				<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="<%= questionData.get(1) %>" />
+				<aui:input label="title" name='<%= ConfigConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
 				<div style="clear:both;"></div>
-				<aui:select label="type" name='<%= "type" + fieldIdSuffix %>'>
-					<aui:option selected='<%= questionData.get(1).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
-					<aui:option selected='<%= questionData.get(1).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
-					<aui:option selected='<%= questionData.get(1).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
+				<aui:select label="type" name='<%= ConfigConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
+					<aui:option selected='<%= questionData.get(0).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
+					<aui:option selected='<%= questionData.get(0).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
+					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
 				<aui:input label="answer" name='<%= "answer" + fieldIdSuffix %>' type="text" value="" />
 				<aui:input label="point" name='<%= "point" + fieldIdSuffix %>' type="text" value="" />
@@ -76,11 +76,7 @@
 				
 				
 				if (!questionData.get(2).isEmpty()) {
-					for (int answerIndex = 1; answerIndex < answerKeys.length; answerIndex++) {
-	// 					request.setAttribute("configuration.jsp-answerindex", String.valueOf(answerIndex)); // TODO: kell ez?
-	// 					request.setAttribute("configuration.jsp-answerFieldIndex", String.valueOf(answerFieldIndex)); // TODO: kell ez?
-						
-						String answerFieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
+					for (int answerIndex = 1; answerIndex <= answerKeys.length; answerIndex++) {
 						%>
 						<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerIndex%>">
 							<div class="row-fields">
@@ -89,8 +85,8 @@
 								</div>
 								<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 								<div>
-									<aui:input label="title" name='<%= "title" + answerFieldIdSuffix %>' type="text" value="<%= answerTitle[answerIndex] %>" />
-									<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="<%= answerKeys[answerIndex] %>" />
+									<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerTitle[answerIndex-1] %>" />
+									<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerKeys[answerIndex-1] %>" />
 									<div style="clear:both;"></div>
 								</div>
 							</div>
@@ -98,7 +94,6 @@
 						<%
 					}
 				} else {
-					String answerFieldIdSuffix = "_a" + 1 + "_p" + parentPageIndex + "_q" + questionIndex;
 					%>
 					<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=1%>">
 						<div class="row-fields">
@@ -107,8 +102,8 @@
 							</div>
 							<aui:input type="hidden" name='<%= "_field" + 1  %>' />
 							<div>
-								<aui:input label="title" name='<%= "title" + answerFieldIdSuffix %>' type="text" value="" />
-								<aui:input label="key" name='<%= "key" + answerFieldIdSuffix %>' type="text" value="" />
+								<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
+								<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
 								<div style="clear:both;"></div>
 							</div>
 						</div>
@@ -139,7 +134,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examQuestion,
-			fieldIndexes: '<portlet:namespace />answerFieldIndexes_p<%=parentPageIndex%>_q<%=questionIndex%>',
+			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.getAnswerFieldIndexName(parentPageIndex, questionIndex) %>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'

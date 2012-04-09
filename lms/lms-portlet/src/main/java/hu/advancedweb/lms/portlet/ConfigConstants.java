@@ -20,16 +20,40 @@ public class ConfigConstants {
 	public static final String RA_CONFIGURATION_SELECTED_EXAM_CONFIG = "lms-selected-exam-config";
 	public static final String RA_CONFIGURATION_SELECTED_EXAM_TEST = "lms-selected-exam-test";
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static final String PREFERENCE_EXAMID = "examConfigId";
+	public static final String PREFERENCE_EXAMID = "examconfigid";
 	
 	public static final String QP_EXAM_CONFIG_ID = "exam_config_id";
+	
+	public static final String QP_PAGE_FIELD_INDEXES = "pageFieldIndexes";
+	
+	public static final String QP_FRAGMENT_QUESTION_FIELD_INDEXES = "questionFieldIndexes";
+	public static String getQuestionFieldIndexName(int pageIndex) {
+		return QP_FRAGMENT_QUESTION_FIELD_INDEXES + "_p" + pageIndex;
+	}
+	
+	public static final String QP_FRAGMENT_ANSWER_FIELD_INDEXES = "answerFieldIndexes";
+	public static String getAnswerFieldIndexName(int pageIndex, int questionIndex) {
+		return QP_FRAGMENT_ANSWER_FIELD_INDEXES + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_QUESTION_TITLE = "title";
+	public static String getQuestionTitleName(int pageIndex, int questionIndex) {
+		return QP_FRAGMENT_QUESTION_TITLE + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_QUESTION_TYPE = "type";
+	public static String getQuestionTypeName(int pageIndex, int questionIndex) {
+		return QP_FRAGMENT_QUESTION_TYPE + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_ANSWER_TITLE = "title";
+	public static String getAnswerTitleName(int pageIndex, int questionIndex, int answerIndex) {
+		return QP_FRAGMENT_ANSWER_TITLE + "_a" + answerIndex + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
+	public static final String QP_FRAGMENT_ANSWER_KEY = "key";
+	public static String getAnswerKeyName(int pageIndex, int questionIndex, int answerIndex) {
+		return QP_FRAGMENT_ANSWER_KEY + "_a" + answerIndex + "_p" + pageIndex + "_q" + questionIndex;
+	}
+	
 }

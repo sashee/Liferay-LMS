@@ -3,7 +3,6 @@ package hu.advancedweb.pilot.rhino;
 
 import hu.advancedweb.pilot.rhino.ValidationBean.ValidationObject;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.mozilla.javascript.*;

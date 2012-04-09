@@ -52,17 +52,22 @@ public class ExamEvaluator {
 		ExamAnswerLocalServiceUtil.updateExamAnswer(answer);
 	}
 
-	public static void createExamConfig(long companyId, long groupId, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws SystemException {
+	public static ExamConfig createExamConfig(long companyId, long groupId, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws SystemException {
 		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
 
 		String evaluatorString = evaluator.isPresent() ? evaluator.get() : generateDefaultEvaluatorJavascript(evaluatorLogic.get());
 
 		String questions = JSONObject.toJSONString(test.tests);
 
-		ExamConfigLocalServiceUtil.createExamConfig(companyId, groupId, questions, evaluatorString);
+		System.out.println("company: " + companyId);
+		System.out.println("groupId: " + groupId);
+		System.out.println("questions: " + questions);
+		System.out.println("evaluatorString: " + evaluatorString);
+		
+		return ExamConfigLocalServiceUtil.createExamConfig(companyId, groupId, questions, evaluatorString);
 	}
 
-	public static void updateExamConfig(long id, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws PortalException, SystemException {
+	public static ExamConfig updateExamConfig(long id, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws PortalException, SystemException {
 		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
 
 		ExamConfig config = ExamConfigLocalServiceUtil.getExamConfig(id);
@@ -73,8 +78,12 @@ public class ExamEvaluator {
 
 		config.setEvaluator(evaluatorString);
 		config.setQuestions(questions);
+		
+		System.out.println("id: " + id);
+		System.out.println("questions: " + questions);
+		System.out.println("evaluatorString: " + evaluatorString);
 
-		ExamConfigLocalServiceUtil.updateExamConfig(config);
+		return ExamConfigLocalServiceUtil.updateExamConfig(config);
 	}
 
 	public static ExamValidationResult evaluate(long companyId, long groupId, long userId, long examConfigId) throws PortalException, SystemException {

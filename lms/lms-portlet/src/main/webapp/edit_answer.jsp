@@ -22,8 +22,6 @@
 		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX));
 		int questionIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_QUESTION_INDEX));
 		int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
-		
-		String fieldIdSuffix = "_a" + answerIndex + "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
 	<div class="field-title">
@@ -31,8 +29,8 @@
 	</div>
 	<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 	<div>
-		<aui:input label="title" name='<%= "title" + fieldIdSuffix %>' type="text" value="" />
-		<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
+		<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
+		<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
 		<div style="clear: both;"></div>
 	</div>
 </div>

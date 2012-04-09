@@ -14,13 +14,13 @@
  */
 --%>
 
-<%@page import="java.util.HashSet"%>
 <%@ include file="/init.jsp" %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= ConfigConstants.CMD_UPDATE %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	
 	<aui:select label="id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
 	
@@ -28,7 +28,7 @@
 			long examConfigId = GetterUtil.getLong(request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
 		%>
 		
-		<aui:option selected='<%= examConfigId == -1 %>' value="new"><liferay-ui:message key="new" /></aui:option>
+		<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new" /></aui:option>
 		
 		<%
 			List<Long> examConfigIds = (List<Long>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS);
@@ -117,7 +117,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examPages,
-			fieldIndexes: '<portlet:namespace />pageFieldIndexes',
+			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.QP_PAGE_FIELD_INDEXES %>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editFieldURL %>'
