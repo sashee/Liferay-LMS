@@ -9,6 +9,7 @@ import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -48,8 +49,21 @@ public class ExamEvaluator {
 
 	public static void appendAnswers(long companyId, long groupId, long userId, long examConfigId, String pageName, Map<String, String> newAnswers) throws SystemException {
 		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
-		answer.setAnswers(appendAnswers(answer.getAnswers(), pageName, newAnswers));
-		ExamAnswerLocalServiceUtil.updateExamAnswer(answer);
+		if (answer == null) {
+			ExamAnswerLocalServiceUtil.createExamAnswer(companyId, groupId, userId, appendAnswers("", pageName, newAnswers), new Date(), examConfigId);
+		} else {
+			answer.setAnswers(appendAnswers(answer.getAnswers(), pageName, newAnswers));
+			ExamAnswerLocalServiceUtil.updateExamAnswer(answer);
+		}
+	}
+
+	public static boolean isPageAnswered(long companyId, long groupId, long userId, long examConfigId, String pageName) throws SystemException {
+		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
+		if (answer == null) {
+			return false;
+		}
+
+		return new ExamAnswers(answer.getAnswers()).answers.containsKey(pageName);
 	}
 
 	public static ExamConfig createExamConfig(long companyId, long groupId, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws SystemException {
