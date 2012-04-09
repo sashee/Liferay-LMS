@@ -21,22 +21,21 @@ import org.mozilla.javascript.Scriptable;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 
 public class ExamEvaluator {
 
-	public static void main(String[] args) {
-		ExamValidationResult result = new ExamEvaluator().evaluate(appendAnswers("", "page1", ImmutableMap.of("exc1", "corr1", "exc2", "corr2")), generateDefaultEvaluatorJavascript(new DefaultExamEvaluatorLogic() {
-			{
-				addCorrectAnswer("page1", "exc1", "corr1", 1);
-				addCorrectAnswer("page1", "exc2", "corr2", 2);
-			}
-		}));
-		System.out.println(result);
-	}
+//	public static void main(String[] args) {
+//		ExamValidationResult result = new ExamEvaluator().evaluate(appendAnswers("", "page1", ImmutableMap.of("exc1", "corr1", "exc2", "corr2")), generateDefaultEvaluatorJavascript(new DefaultExamEvaluatorLogic() {
+//			{
+//				addCorrectAnswer("page1", "exc1", "corr1", 1);
+//				addCorrectAnswer("page1", "exc2", "corr2", 2);
+//			}
+//		}));
+//		System.out.println(result);
+//	}
 
 	private static String appendAnswers(String oldAnswers, String pageName, Map<String, String> newAnswers) {
 		if (oldAnswers == null || oldAnswers.trim().compareTo("") == 0) {

@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -34,26 +32,27 @@ public class ExamTest {
 	/**
 	 * Create Exam Test from JSON config.
 	 */
+	@SuppressWarnings("rawtypes")
 	public ExamTest(String config) {
-		tests = (JSONObject) JSONValue.parse(config);
+//		tests = (JSONObject) JSONValue.parse(config);
 		
-//		try {
-//			tests = (JSONObject) new JSONParser().parse(config, new ContainerFactory() {
-//			    
-//			        
-//					@Override
-//			        public Map createObjectContainer() {
-//			                return new LinkedHashMap();
-//			        }
-//			        
-//			        @Override
-//			        public List creatArrayContainer() {
-//			                return new ArrayList();
-//			        }
-//			});
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			tests = (Map) new JSONParser().parse(config, new ContainerFactory() {
+			    
+			        
+					@Override
+			        public Map createObjectContainer() {
+			                return new LinkedHashMap();
+			        }
+			        
+			        @Override
+			        public List creatArrayContainer() {
+			                return new ArrayList();
+			        }
+			});
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
 		
 	}

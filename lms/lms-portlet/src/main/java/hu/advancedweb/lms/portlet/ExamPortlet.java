@@ -1,9 +1,13 @@
 package hu.advancedweb.lms.portlet;
 
+import hu.advancedweb.lms.evaluation.ExamEvaluator;
 import hu.advancedweb.lms.evaluation.ExamTest;
 import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +17,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -29,6 +34,8 @@ import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -48,23 +55,74 @@ public class ExamPortlet extends MVCPortlet {
 	 * @param response
 	 */
     public void submitExamPage(ActionRequest request, ActionResponse response) throws Exception {
+    	
+    	
+		// DEBUG
+		{
+			Enumeration<?> parms = request.getParameterNames ();
+			
+			List<String> a = new ArrayList<String>();
+			
+			String parmname;
+		    String parmval;
+			while (parms.hasMoreElements ()) {
+		        parmname = (String) parms.nextElement ();
+		        parmval = request.getParameter (parmname);
+		        a.add(parmname + " : " + parmval);
+		    }
+			
+			Collections.sort(a);
+			
+			for (String string : a) {
+				System.out.println(string);
+			}
+			
+			System.out.println("----------------------");
+		}
+		
+		
+		String portletResource = ParamUtil.getString(request, "portletResource");
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+		long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+		
+		Map<String,String> answerMap = new HashMap<String, String>();
+		
+		
+		
+		ExamConfig examConfig = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
+		ExamTest examTest = new ExamTest(examConfig.getQuestions());
+		Map<String, List<String>> pageQuestions = examTest.tests.get(getPageNumber(themeDisplay) + "");
+		
+		for(String question : pageQuestions.keySet()) {
+			String answer = ParamUtil.getString(request, question);
+			if (answer == null ) {
+				break;
+			} else {
+				answerMap.put(question, answer);
+			}
+		}
+		
+		ExamEvaluator.appendAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "", answerMap);
+    	
+    	
+    	
+    	
 
-        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+       
 
         
         // TODO: teszt automatikus validalasa, eredm�ny beallitasa parameterkent / eltarolni / valami
-        String answer = ParamUtil.getString(request, "answer");
         
         ExamValidationResponse examValidationResponse = new ExamValidationResponse();
-        
-        if (answer.equals("5")) {
-        	examValidationResponse.setResponseText("1 pont");
-        } else {
-        	examValidationResponse.setResponseText("0 pont");
-        }
+        examValidationResponse.setResponseText("1 pont TODO");
             
         SessionMessages.add(request, "exampagevalidated");
         request.setAttribute("validationResponse", examValidationResponse);
+        
+        // TODO
+        
+        
         
         Layout nextLayout = getNextPage(themeDisplay);
 
@@ -152,11 +210,8 @@ public class ExamPortlet extends MVCPortlet {
 	}
 
 	public static String getNextPageUrl(RenderRequest request) throws SystemException, PortalException {
-		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-	
 		Layout nextPage = getNextPage(themeDisplay);
-		
 		return (nextPage == null) ? null : nextPage.getFriendlyURL();
 	}
 
@@ -178,10 +233,23 @@ public class ExamPortlet extends MVCPortlet {
 	public static int getPageNumber(ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
         int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
-        
-        System.out.println(nextPageIndex);
-        
         return nextPageIndex;
-        
+	}
+	
+	public static boolean isPageAnswered(HttpServletRequest request) {
+		try {
+			String portletResource = ParamUtil.getString(request, "portletResource");
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			boolean isPageAnswered = ExamEvaluator.isPageAnswered(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
+			return isPageAnswered;
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

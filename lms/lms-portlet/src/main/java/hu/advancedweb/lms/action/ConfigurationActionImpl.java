@@ -82,29 +82,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			System.out.println("Unknown command");
 		}
 		
-//		// DEBUG
-//		{
-//			Enumeration<?> parms = actionRequest.getParameterNames ();
-//			
-//			List<String> a = new ArrayList<String>();
-//			
-//			String parmname;
-//		    String parmval;
-//			while (parms.hasMoreElements ()) {
-//		        parmname = (String) parms.nextElement ();
-//		        parmval = actionRequest.getParameter (parmname);
-//		        a.add(parmname + " : " + parmval);
-//		    }
-//			
-//			Collections.sort(a);
-//			
-//			for (String string : a) {
-//				System.out.println(string);
-//			}
-//			
-//			System.out.println("----------------------");
-//		}
-		
 		preferences.store();
 		
 		super.processAction(portletConfig, actionRequest, actionResponse);
