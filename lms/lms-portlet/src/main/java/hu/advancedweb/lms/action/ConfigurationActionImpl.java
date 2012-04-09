@@ -63,7 +63,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			Optional<DefaultExamEvaluatorLogic> evaluatorLogic = Optional.absent();
 			
 			if (evaluatorLogicAutogenerate.equalsIgnoreCase("true")) {
-				System.out.println("GENERATING");
 				evaluatorLogic = Optional.of(examEvaluatorLogic);
 			} else {
 				evaluator = Optional.of(evaluatorScriptText);
@@ -168,12 +167,12 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			}
 			Collections.sort(examConfigIds);
 			
-			
 			renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS, examConfigIds);
 			
 			if (examConfigIdFound) {
 				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, examConfigId);
 				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST, new ExamTest(selectedExamConfig.getQuestions()));
+				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT, selectedExamConfig.getEvaluator());
 			} else {
 				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, -1L);
 			}

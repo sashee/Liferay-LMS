@@ -1,17 +1,24 @@
 package hu.advancedweb.lms.portlet;
 
+import hu.advancedweb.lms.evaluation.ExamTest;
+import hu.advancedweb.model.ExamConfig;
+import hu.advancedweb.service.ExamConfigLocalServiceUtil;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
@@ -29,6 +36,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class ExamPortlet extends MVCPortlet {
 
+	
 	/**
 	 * Az adott teszt oldalt kuldi be.
 	 * Lefut a beallitott automatikus validacio, 
@@ -94,8 +102,24 @@ public class ExamPortlet extends MVCPortlet {
     
     
     
-    
-    
+    public static Map<String, List<String>> getQuestionData(RenderRequest request, PortletPreferences preferences) {
+		long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		try {
+			ExamConfig examConfig = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
+			
+			ExamTest examTest = new ExamTest(examConfig.getQuestions());
+			
+			Map<String, List<String>> pageQuestions = examTest.tests.get(getPageNumber(themeDisplay) + "");
+			return pageQuestions;
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
     
     public static boolean canUserViewNextPage(RenderRequest request) throws SystemException, PortalException {
 		
@@ -149,5 +173,15 @@ public class ExamPortlet extends MVCPortlet {
 		} else {
 			return null;
 		}
+	}
+	
+	public static int getPageNumber(ThemeDisplay themeDisplay) throws PortalException, SystemException {
+		Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
+        int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
+        
+        System.out.println(nextPageIndex);
+        
+        return nextPageIndex;
+        
 	}
 }

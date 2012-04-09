@@ -23,6 +23,48 @@
 <!-- Vizsga form.  -->
 <aui:form name="fm" action="<%= actionUrl.toString() %>" method="post">
 	<aui:fieldset>
+	
+		<%
+			Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
+			String pageNumber = (ExamPortlet.getPageNumber(themeDisplay) + 1) + "";
+			
+			if (questions != null) {
+				for(String key : questions.keySet()) {
+					List<String> question = questions.get(key);
+					
+					String type = question.get(0);
+					String title = question.get(1);
+					String answerKeys = question.get(2);
+					String answerTitles = question.get(3);
+					
+					
+					if (type.equals("text")) {
+					%>
+						<aui:input type="text" label="<%= title %>" name="<%= key %>" />
+					<%
+					} else if (type.equals("radio") || type.equals("checkbox")) {
+					%>
+						<span><%= title %></span>
+						<% 
+							String[] answerKeysArray = answerKeys.split(",");
+							String[] answerTitlesArray = answerTitles.split(",");
+							
+							for(int i = 0; i<answerKeysArray.length; i++) {
+								%>
+									<aui:input type="<%= type %>" label="<%= answerTitlesArray[i] %>" name="<%= answerKeysArray[i] %>" />
+								<%
+							}
+						%>
+					<%
+					}
+				}
+			} else {
+				%>
+					<div>Nincs kérdés definiálva erre az oldalra!</div>
+				<%
+			}
+		%>
+	
 		Mennyi 2+3?
 		<aui:input name="answer" size="2" />
 		<aui:button-row>

@@ -99,10 +99,11 @@
 	<aui:button-row>
 		<%
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
+			String evaluatorScript = (String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
 		%>
 		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
 		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
-			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="code" />
+			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="code" value="<%= evaluatorScript %>" />
 		</div>
 		<aui:button type="submit" /> 
 	</aui:button-row>

@@ -15,6 +15,7 @@ public class ConfigConstants {
 	public static final String RA_CONFIGURATION_JSP_PAGEINDEX = "configuration.jsp-pageindex";
 	public static final String RA_CONFIGURATION_JSP_QUESTIONINDEX = "configuration.jsp-questionindex";
 	public static final String RA_CONFIGURATION_JSP_QUESTIONDATA = "configuration.jsp-questiondata";
+	public static final String RA_CONFIGURATION_JSP_EVALUATORSCRIPT = "configuration.jsp-evaluator-script";
 	
 	public static final String RA_CONFIGURATION_EXAM_CONFIGS = "lms-exam-configs";
 	public static final String RA_CONFIGURATION_SELECTED_EXAM_CONFIG = "lms-selected-exam-config";
