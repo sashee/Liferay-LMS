@@ -21,7 +21,7 @@
 <portlet:actionURL name="submitExamPage" var="actionUrl" />
 
 <%
-if (!ExamPortlet.isPageAnswered(request)) {
+if (!ExamPortlet.isPageAnswered(request, preferences )) {
 	// exam form
 %>
 	<!-- Exam form.  -->
@@ -30,8 +30,7 @@ if (!ExamPortlet.isPageAnswered(request)) {
 		
 			<%
 				Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
-				String pageNumber = (ExamPortlet.getPageNumber(themeDisplay) + 1) + "";
-				
+
 				if (questions != null) {
 					for(String key : questions.keySet()) {
 						List<String> question = questions.get(key);
@@ -77,11 +76,11 @@ if (!ExamPortlet.isPageAnswered(request)) {
 <% } else {
 	// exam results
 	Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
-	String pageNumber = (ExamPortlet.getPageNumber(themeDisplay) + 1) + "";
-	Map<String,String> answerData = ExamPortlet.getAnswerData(request);
-	ExamValidationResult result = ExamPortlet.getEvaluationData(request);
+	String pageNumber = (ExamPortlet.getPageNumber(themeDisplay)) + "";
+	Map<String,String> answerData = ExamPortlet.getAnswerData(request, preferences);
+	ExamValidationResult result = ExamPortlet.getEvaluationData(request, preferences);
 	PageValidationResult pageResult = result.pageValidations.get(pageNumber);
-		
+	
 	int testScore = result.score;
 	int pageScore = pageResult.score;
 		

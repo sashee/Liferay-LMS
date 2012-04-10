@@ -135,11 +135,9 @@ public class ExamPortlet extends MVCPortlet {
 		return null;
 	}
     
-    public static Map<String,String> getAnswerData(HttpServletRequest request) {
+    public static Map<String,String> getAnswerData(HttpServletRequest request, PortletPreferences preferences) {
     	try {
-	    	String portletResource = ParamUtil.getString(request, "portletResource");
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
     	
 			ExamAnswers examAnswers = ExamEvaluator.getExamAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
@@ -162,21 +160,24 @@ public class ExamPortlet extends MVCPortlet {
     	return null;
     }
     
-    public static ExamValidationResult getEvaluationData(HttpServletRequest request) {
-    	try {
-	    	String portletResource = ParamUtil.getString(request, "portletResource");
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+    public static ExamValidationResult getEvaluationData(HttpServletRequest request, PortletPreferences preferences ) {
     	
+    	System.out.println("INHERE");
+    	
+    	try {
+    		System.out.println("INHERE2");
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			System.out.println("INHERE3");
 			ExamValidationResult validationData = ExamEvaluator.evaluate(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId);
-					
+			System.out.println("INHERE4: " + validationData);
 			return validationData;
     	} catch (SystemException e) {
 			e.printStackTrace();
 		} catch (PortalException e) {
 			e.printStackTrace();
 		}
+    	System.out.println("INHERE5");
     	return null;
     }
     
@@ -243,11 +244,9 @@ public class ExamPortlet extends MVCPortlet {
         return nextPageIndex;
 	}
 	
-	public static boolean isPageAnswered(HttpServletRequest request) {
+	public static boolean isPageAnswered(HttpServletRequest request, PortletPreferences preferences ) {
 		try {
-			String portletResource = ParamUtil.getString(request, "portletResource");
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
 			boolean isPageAnswered = ExamEvaluator.isPageAnswered(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
 			return isPageAnswered;
