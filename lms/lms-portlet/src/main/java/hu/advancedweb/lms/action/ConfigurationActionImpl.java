@@ -9,6 +9,7 @@ import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,25 @@ import com.liferay.portlet.PortletPreferencesFactoryUtil;
 public class ConfigurationActionImpl extends DefaultConfigurationAction {
 
 	public void processAction(PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		
+		// debug
+//		System.out.println("------------------------");
+//
+//		Enumeration<?> parms = actionRequest.getParameterNames ();
+//		List<String> a = new ArrayList<String>();
+//		
+//		String parmname;
+//	    String parmval;
+//		while (parms.hasMoreElements ()) {
+//	        parmname = (String) parms.nextElement ();
+//	        parmval = actionRequest.getParameter (parmname);
+//	        a.add(parmname + " : " + parmval);
+//	    }
+//		Collections.sort(a);
+//		for (String string : a) {
+//			System.out.println(string);
+//		}
+//		System.out.println("----------------------");
 		
 		String portletResource = ParamUtil.getString(actionRequest, "portletResource");
 		
@@ -208,6 +228,13 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			
 			String answerKey = actionRequest.getParameter(ConfigConstants.getAnswerKeyName(pageNum, questionNum, answerIndex));
 			String answerTitle = actionRequest.getParameter(ConfigConstants.getAnswerTitleName(pageNum, questionNum, answerIndex));
+			
+			if (answerKey.isEmpty()) {
+				answerKey = " ";
+			}
+			if (answerTitle.isEmpty()) {
+				answerTitle = " ";
+			}
 			
 			keyBuffer.append(",");
 			keyBuffer.append(answerKey);

@@ -18,7 +18,7 @@ public class ExamTest {
 	 * Az utolso csak CHECKBOX es RADIO esetben<br>
 	 * Az inputok nevei vesszovel vannak elvalasztva(TEXT esetben csak 1 van)
 	 * */
-//	public Map<String, ? extends Map<String, ? extends List<String>>>	tests	= Maps.newLinkedHashMap();// TODO
+//	public Map<String, ? extends Map<String, ? extends List<String>>>	tests	= Maps.newLinkedHashMap();
 	public Map<String, Map<String, List<String>>>	tests	= Maps.newLinkedHashMap(); 
 	
 	

@@ -22,6 +22,7 @@
 
 <%
 if (!ExamPortlet.isPageAnswered(request)) {
+	// exam form
 %>
 	<!-- Exam form.  -->
 	<aui:form name="fm" action="<%= actionUrl.toString() %>" method="post">
@@ -40,24 +41,26 @@ if (!ExamPortlet.isPageAnswered(request)) {
 						String answerKeys = question.get(2);
 						String answerTitles = question.get(3);
 						
-						if (type.equals("text")) {
-						%>
-							<aui:input type="text" label="<%= title %>" name="<%= key %>" />
-						<%
-						} else if (type.equals("radio") || type.equals("checkbox")) {
-						%>
-							<span><%= title %></span>
-							<% 
-								String[] answerKeysArray = answerKeys.split(",");
-								String[] answerTitlesArray = answerTitles.split(",");
-								
-								for(int i = 0; i<answerKeysArray.length; i++) {
-									%>
-										<aui:input type="<%= type %>" label="<%= answerTitlesArray[i] %>" name="<%= key %>" value="<%= answerKeysArray[i] %>" />
-									<%
-								}
+						%><div class="viewQuestionBox"><%
+							if (type.equals("text")) {
 							%>
-						<%
+								<aui:input type="text" label="<%= title %>" name="<%= key %>" />
+							<%
+							} else if (type.equals("radio") || type.equals("checkbox")) {
+							%>
+								<span><%= title %></span>
+								<% 
+									String[] answerKeysArray = answerKeys.split(",");
+									String[] answerTitlesArray = answerTitles.split(",");
+									
+									for(int i = 0; i<answerKeysArray.length; i++) {
+										%>
+											<aui:input type="<%= type %>" label="<%= answerTitlesArray[i] %>" name="<%= key %>" value="<%= answerKeysArray[i] %>" />
+										<%
+									}
+								%>
+							<%
+						%></div><%
 						}
 					}
 				} else {
@@ -72,36 +75,51 @@ if (!ExamPortlet.isPageAnswered(request)) {
 		</aui:fieldset>
 	</aui:form>
 <% } else {
-		Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
-		String pageNumber = (ExamPortlet.getPageNumber(themeDisplay) + 1) + "";
+	// exam results
+	Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
+	String pageNumber = (ExamPortlet.getPageNumber(themeDisplay) + 1) + "";
+	Map<String,String> answerData = ExamPortlet.getAnswerData(request);
+	ExamValidationResult result = ExamPortlet.getEvaluationData(request);
+	PageValidationResult pageResult = result.pageValidations.get(pageNumber);
 		
-		if (questions != null) {
-			for(String key : questions.keySet()) {
-				List<String> question = questions.get(key);
+	int testScore = result.score;
+	int pageScore = pageResult.score;
+		
+	if (questions != null) {
+		for(String key : questions.keySet()) {
+			
+			ExerciseValidationResult questionValidationResult = pageResult.exerciseValidations.get(key);
+			int questionScore = questionValidationResult.score;
+			String questionCorrectAnswer = questionValidationResult.text;
 				
-				String type = question.get(0);
-				String title = question.get(1);
-				String answerKeys = question.get(2);
-				String answerTitles = question.get(3);
+			List<String> question = questions.get(key);
 				
-				%>
-				<div><%= key %></div>
-				<div><%= title %></div>
-				<%
-			}
-		} else {
+			String type = question.get(0);
+			String title = question.get(1);
+				
 			%>
-				<div>Nincs kérdés definiálva erre az oldalra!</div>
+			<div class="viewQuestionBox">
+				<div><b><%= key %>, <%= title %></b></div>
+				<div><i><%= answerData.get(key) %></i></div>
+				<div></div>
+				<div style='color:<%= questionScore == 0 ? "red" : "green"%>;'><i><%= questionScore %></i></div>
+				<div style='color:<%= questionScore == 0 ? "red" : "green"%>;'><i><%= questionCorrectAnswer %></i></div>
+			</div>
 			<%
 		}
+	} else {
+		%>
+			<div>Nincs kérdés definiálva erre az oldalra!</div>
+		<%
+	}
 		
-		if (ExamPortlet.canUserViewNextPage(renderRequest)) { %>
-			<% 
-			String nextPageUrl = ExamPortlet.getNextPageUrl(renderRequest);
-			if (nextPageUrl != null) { %>
-				<a href="<%= nextPageUrl %>">Következő oldal</a>
-			<% 
-			} 
-		}
-	} 
+	if (ExamPortlet.canUserViewNextPage(renderRequest)) { %>
+		<% 
+		String nextPageUrl = ExamPortlet.getNextPageUrl(renderRequest);
+		if (nextPageUrl != null) { %>
+			<a href="<%= nextPageUrl %>">Következő oldal</a>
+		<% 
+		} 
+	}
+} 
 %>

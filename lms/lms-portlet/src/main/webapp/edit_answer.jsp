@@ -25,7 +25,8 @@
 	%>
 
 	<div class="field-title">
-		<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
+<%-- 		<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span> --%>
+		<span class="field-label">Answer</span>
 	</div>
 	<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 	<div>

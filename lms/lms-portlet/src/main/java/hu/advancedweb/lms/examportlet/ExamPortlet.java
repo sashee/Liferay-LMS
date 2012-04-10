@@ -25,7 +25,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
- * TODO
+ * TODO: TODEL
  */
 public class ExamPortlet extends MVCPortlet {
 

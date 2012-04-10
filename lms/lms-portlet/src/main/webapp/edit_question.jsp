@@ -42,23 +42,26 @@
 			questionData.add("");
 		}
 		
-		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
+// 		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
 	<div class="field-title">
-		<span class="field-label">Question <%=questionIndex%> of <%= parentPageIndex %></span>
+<%-- 		<span class="field-label">Question <%=questionIndex%> of <%= parentPageIndex %></span> --%>
+		<span class="field-label">Question</span>
 	</div>
 	
 	<aui:input type="hidden" name='<%= "_field" + questionIndex %>' />
 	
 	<div id="examQuestion<%=questionIndex%>">
 		<aui:fieldset cssClass="rows-container examQuestion">
-		
 			<div>
 				<aui:input label="title" name='<%= ConfigConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
-				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" />
+<%-- 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" /> --%>
 				<div style="clear:both;"></div>
-				<aui:select label="type" name='<%= ConfigConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
+				<%
+					String typeChangeScript = renderResponse.getNamespace() + "foldAnswerContainer('" + renderResponse.getNamespace() + "answerContainer_p" + parentPageIndex + "_q" + questionIndex + "', false)";
+				%>
+				<aui:select onChange="<%= typeChangeScript %>" label="type" name='<%= ConfigConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
 					<aui:option selected='<%= questionData.get(0).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
@@ -69,48 +72,58 @@
 			</div>
 		
 			<%
-				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
-				
-				String[] answerKeys = questionData.get(2).split(",");
-				String[] answerTitle = questionData.get(3).split(",");
-				
-				
-				if (!questionData.get(2).isEmpty()) {
-					for (int answerIndex = 1; answerIndex <= answerKeys.length; answerIndex++) {
+				String defaultStyleForAnswerContainer = "";
+				if (questionData.get(0).equals("text")) {
+					defaultStyleForAnswerContainer = "z-index:-1;position:absolute;opacity:0;";
+				}
+			%>
+		
+			<div id="<portlet:namespace/>answerContainer_p<%= parentPageIndex %>_q<%=questionIndex%>">
+				<%
+					ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+					
+					String[] answerKeys = questionData.get(2).split(",");
+					String[] answerTitle = questionData.get(3).split(",");
+					
+					if (!questionData.get(2).isEmpty()) {
+						for (int answerIndex = 1; answerIndex <= answerKeys.length; answerIndex++) {
+							%>
+							<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerIndex%>">
+								<div class="row-fields">
+									<div class="field-title">
+	<%-- 									<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span> --%>
+										<span class="field-label">Answer</span>
+									</div>
+									<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
+									<div>
+										<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerTitle[answerIndex-1] %>" />
+										<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerKeys[answerIndex-1] %>" />
+										<div style="clear:both;"></div>
+									</div>
+								</div>
+							</div>
+							<%
+						}
+					} else {
 						%>
-						<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerIndex%>">
+						<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=1%>">
 							<div class="row-fields">
 								<div class="field-title">
-									<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
+	<%-- 								<span class="field-label">Answer <%=1%> of Question <%=questionIndex%> of <%= parentPageIndex %></span> --%>
+									<span class="field-label">Answer</span>
 								</div>
-								<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
+								<aui:input type="hidden" name='<%= "_field" + 1  %>' />
 								<div>
-									<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerTitle[answerIndex-1] %>" />
-									<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerKeys[answerIndex-1] %>" />
+									<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
+									<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
 									<div style="clear:both;"></div>
 								</div>
 							</div>
 						</div>
 						<%
 					}
-				} else {
-					%>
-					<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=1%>">
-						<div class="row-fields">
-							<div class="field-title">
-								<span class="field-label">Answer <%=1%> of Question <%=questionIndex%> of <%= parentPageIndex %></span>
-							</div>
-							<aui:input type="hidden" name='<%= "_field" + 1  %>' />
-							<div>
-								<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
-								<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
-								<div style="clear:both;"></div>
-							</div>
-						</div>
-					</div>
-					<%
-				}
-				%> 
+					%> 
+				</div>
 		</aui:fieldset>
 		<br/>
 		<br/>

@@ -49,16 +49,19 @@
 <%@ page import="com.liferay.portal.security.permission.ActionKeys" %>
 <%@ page import="com.liferay.portal.service.permission.PortalPermissionUtil" %>
 <%@ page import="com.liferay.portal.service.permission.PortletPermissionUtil" %>
-<%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
-<%@ page import="com.liferay.portal.util.PortalUtil"%>
-<%@ page import="com.liferay.portal.theme.ThemeDisplay"%>
-<%@ page import="com.liferay.portal.model.Layout"%>
+<%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.util.PortalUtil" %>
+<%@ page import="com.liferay.portal.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.model.Layout" %>
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
 
 <%@ page import="hu.advancedweb.lms.portlet.ExamValidationResponse" %>
 <%@ page import="hu.advancedweb.lms.portlet.ExamPortlet" %>
 <%@ page import="hu.advancedweb.lms.portlet.ConfigConstants" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamTest" %>
+<%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult" %>
+<%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult.PageValidationResult" %>
+<%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult.ExerciseValidationResult" %>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />

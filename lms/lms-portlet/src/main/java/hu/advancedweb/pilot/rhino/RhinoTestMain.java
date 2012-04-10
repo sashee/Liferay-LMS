@@ -81,6 +81,7 @@ public class RhinoTestMain {
 	 */
 	private String getJavascriptFramework() {
 		return
+				"/*teszt*/" +
 				"function validate(){" +
 				"   var validationFunctionBase = 'validatePage';" +
 				"   var pageNum = 1;" +
@@ -98,6 +99,7 @@ public class RhinoTestMain {
 	 */
 	private String getValidationJavascript() {
 		return
+				"/*teszt*/" +
 				"function validatePage1() {" +
 				"   if (examDataObj.testData == 'valami') validationDataObj.add(1,'questionOne', 1, '');" +	// validationDataObj accesses should be wrapped by helper functions
 				"   else validationDataObj.add(1,'questionOne', 0, 'a helyes valasz 42');" +

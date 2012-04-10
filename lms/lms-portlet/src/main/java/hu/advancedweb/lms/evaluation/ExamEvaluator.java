@@ -64,6 +64,15 @@ public class ExamEvaluator {
 
 		return new ExamAnswers(answer.getAnswers()).answers.containsKey(pageName);
 	}
+	
+	public static ExamAnswers getExamAnswers(long companyId, long groupId, long userId, long examConfigId, String pageName) throws SystemException {
+		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
+		if (answer == null) {
+			return null;
+		}
+
+		return new ExamAnswers(answer.getAnswers());
+	}
 
 	public static ExamConfig createExamConfig(long companyId, long groupId, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws SystemException {
 		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
@@ -72,11 +81,6 @@ public class ExamEvaluator {
 
 		String questions = JSONObject.toJSONString(test.tests);
 
-		System.out.println("company: " + companyId);
-		System.out.println("groupId: " + groupId);
-		System.out.println("questions: " + questions);
-		System.out.println("evaluatorString: " + evaluatorString);
-		
 		return ExamConfigLocalServiceUtil.createExamConfig(companyId, groupId, questions, evaluatorString);
 	}
 
@@ -92,10 +96,6 @@ public class ExamEvaluator {
 		config.setEvaluator(evaluatorString);
 		config.setQuestions(questions);
 		
-		System.out.println("id: " + id);
-		System.out.println("questions: " + questions);
-		System.out.println("evaluatorString: " + evaluatorString);
-
 		return ExamConfigLocalServiceUtil.updateExamConfig(config);
 	}
 
@@ -110,14 +110,20 @@ public class ExamEvaluator {
 	private static String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
 		StringBuilder result = new StringBuilder();
 
+		result.append("/* - Generated Evaluator Logic - */");
+		result.append(System.getProperty("line.separator"));
 		result.append("function validate(){");
+		result.append(System.getProperty("line.separator"));
 		for (Entry<String, Map<String, Pair<String, Integer>>> pages : logic.correctAnswers.entrySet()) {
 			for (Entry<String, Pair<String, Integer>> exercises : pages.getValue().entrySet()) {
-				result.append("defaultEvaluatorLogic.addCorrectAnswer('" + pages.getKey() + "', '" + exercises.getKey() + "', '" + exercises.getValue().getValue0() + "', " + exercises.getValue().getValue1() + ");");
+				result.append("    defaultEvaluatorLogic.addCorrectAnswer('" + pages.getKey() + "', '" + exercises.getKey() + "', '" + exercises.getValue().getValue0() + "', " + exercises.getValue().getValue1() + ");");
+				result.append(System.getProperty("line.separator"));
 			}
 		}
-
-		result.append("defaultEvaluator.evaluate(examAnswers,defaultEvaluatorLogic,validationDataObj);}");
+		result.append(System.getProperty("line.separator"));
+		result.append("    defaultEvaluator.evaluate(examAnswers,defaultEvaluatorLogic,validationDataObj);");
+		result.append(System.getProperty("line.separator"));
+		result.append("}");
 
 		return result.toString();
 	}

@@ -145,6 +145,18 @@
 			document.getElementById('<portlet:namespace/>evaluation_logic_script').style.display = "block";
 		}
 	}
+	
+	function <portlet:namespace />foldAnswerContainer(id,hide) {
+		if (hide) {
+			document.getElementById(id).style.zIndex = -1;
+			document.getElementById(id).style.opacity = 0;
+			document.getElementById(id).style.position = "absolute";
+		} else {
+			document.getElementById(id).style.zIndex = 1;
+			document.getElementById(id).style.opacity = 100;
+			document.getElementById(id).style.position = "relative";
+		}
+	}
 
 </aui:script>
 
