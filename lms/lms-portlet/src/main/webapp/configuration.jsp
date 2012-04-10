@@ -157,6 +157,4 @@
 			document.getElementById(id).style.position = "relative";
 		}
 	}
-
 </aui:script>
-
