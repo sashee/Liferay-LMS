@@ -45,6 +45,7 @@ public class ExamAnswerLocalServiceImpl extends ExamAnswerLocalServiceBaseImpl {
 		result.setAnswers(answers);
 		result.setDate(date);
 		result.setExamConfigId(examConfigId);
+		result.resetOriginalValues();
 		result = updateExamAnswer(result);
 		return result;
 
