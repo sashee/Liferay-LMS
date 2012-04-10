@@ -59,7 +59,7 @@
 <%-- 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" /> --%>
 				<div style="clear:both;"></div>
 				<%
-					String typeChangeScript = renderResponse.getNamespace() + "foldAnswerContainer('" + renderResponse.getNamespace() + "answerContainer_p" + parentPageIndex + "_q" + questionIndex + "', false)";
+					String typeChangeScript = renderResponse.getNamespace() + "foldAnswerContainer('" + renderResponse.getNamespace() + "answerContainer_p" + parentPageIndex + "_q" + questionIndex + "', this.value == 'text')";
 				%>
 				<aui:select onChange="<%= typeChangeScript %>" label="type" name='<%= ConfigConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
 					<aui:option selected='<%= questionData.get(0).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
@@ -78,7 +78,7 @@
 				}
 			%>
 		
-			<div id="<portlet:namespace/>answerContainer_p<%= parentPageIndex %>_q<%=questionIndex%>">
+			<div style="<%= defaultStyleForAnswerContainer %>" id="<portlet:namespace/>answerContainer_p<%= parentPageIndex %>_q<%=questionIndex%>">
 				<%
 					ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
 					
