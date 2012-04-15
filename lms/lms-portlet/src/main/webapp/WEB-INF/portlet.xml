@@ -8,7 +8,7 @@
 >
 	<portlet>
 		<portlet-name>lms</portlet-name>
-		<display-name>lms</display-name>
+		<display-name>portlet.lms.exam</display-name>
 		
 		<portlet-class>hu.advancedweb.lms.portlet.ExamPortlet</portlet-class>
 		<init-param>
@@ -21,9 +21,9 @@
 		</supports>
 		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>lms</title>
-			<short-title>lms</short-title>
-			<keywords>lms</keywords>
+			<title>portlet.lms.exam</title>
+			<short-title>portlet.lms.exam</short-title>
+			<keywords>portlet.lms.exam</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
