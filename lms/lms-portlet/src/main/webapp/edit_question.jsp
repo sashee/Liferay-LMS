@@ -73,7 +73,7 @@
 		
 			<%
 						String defaultStyleForAnswerContainer = "";
-							if (questionData.get(0).equals("text")) {
+							if (questionData.get(0).equals("text") || questionData.get(0).isEmpty()) {
 								defaultStyleForAnswerContainer = "z-index:-1;position:absolute;opacity:0;";
 							}
 					%>
