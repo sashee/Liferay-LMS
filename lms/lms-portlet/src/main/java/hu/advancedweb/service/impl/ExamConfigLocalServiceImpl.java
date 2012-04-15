@@ -57,7 +57,7 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 
 		String questions = JSONObject.toJSONString(test.tests);
 
-		return ExamConfigLocalServiceUtil.createExamConfig(companyId, groupId, questions, evaluatorString);
+		return createExamConfig(companyId, groupId, questions, evaluatorString);
 	}
 
 	private String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
@@ -94,7 +94,11 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		config.setEvaluator(evaluatorString);
 		config.setQuestions(questions);
 
-		return ExamConfigLocalServiceUtil.updateExamConfig(config);
+		ExamConfig result = updateExamConfig(config);
+
+		examConfigPersistence.clearCache();// TODO:workaround
+
+		return result;
 	}
 
 }
