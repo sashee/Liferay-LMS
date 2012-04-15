@@ -94,8 +94,8 @@
 %>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_QUESTION %>" />
-		<portlet:param name="<%= ConfigConstants.CP_PAGE_INDEX %>" value="<%= pageIndexString %>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= JspConstants.CMD_ADD_QUESTION %>" />
+		<portlet:param name="<%= JspConstants.CP_PAGE_INDEX %>" value="<%= pageIndexString %>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(

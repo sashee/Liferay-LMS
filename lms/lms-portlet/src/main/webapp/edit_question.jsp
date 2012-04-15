@@ -55,19 +55,19 @@
 	<div id="examQuestion<%=questionIndex%>">
 		<aui:fieldset cssClass="rows-container examQuestion">
 			<div>
-				<aui:input label="exam-question-title" name='<%= ConfigConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
+				<aui:input label="exam-question-title" name='<%= JspConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
 <%-- 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" /> --%>
 				<div style="clear:both;"></div>
 				<%
 					String typeChangeScript = renderResponse.getNamespace() + "foldAnswerContainer('" + renderResponse.getNamespace() + "answerContainer_p" + parentPageIndex + "_q" + questionIndex + "', this.value == 'text')";
 				%>
-				<aui:select onChange="<%= typeChangeScript %>" label="exam-question-type" name='<%= ConfigConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
+				<aui:select onChange="<%= typeChangeScript %>" label="exam-question-type" name='<%= JspConstants.getQuestionTypeName(parentPageIndex, questionIndex) %>'>
 					<aui:option selected='<%= questionData.get(0).equals("text") %>' value="text"><liferay-ui:message key="text" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
-				<aui:input label="exam-question-answer" name='<%= ConfigConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="" />
-				<aui:input label="exam-question-point" name='<%= ConfigConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' type="text" value="" />
+				<aui:input label="exam-question-answer" name='<%= JspConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="" />
+				<aui:input label="exam-question-point" name='<%= JspConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' type="text" value="" />
 				<div style="clear: both;"></div>
 			</div>
 		
@@ -96,8 +96,8 @@
 									</div>
 									<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 									<div>
-										<aui:input label="exam-answer-title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerTitle[answerIndex-1] %>" />
-										<aui:input label="exam-answer-key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerKeys[answerIndex-1] %>" />
+										<aui:input label="exam-answer-title" name='<%= JspConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerTitle[answerIndex-1] %>" />
+										<aui:input label="exam-answer-key" name='<%= JspConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="<%= answerKeys[answerIndex-1] %>" />
 										<div style="clear:both;"></div>
 									</div>
 								</div>
@@ -114,8 +114,8 @@
 								</div>
 								<aui:input type="hidden" name='<%= "_field" + 1  %>' />
 								<div>
-									<aui:input label="exam-answer-title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
-									<aui:input label="exam-answer-key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
+									<aui:input label="exam-answer-title" name='<%= JspConstants.getAnswerTitleName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
+									<aui:input label="exam-answer-key" name='<%= JspConstants.getAnswerKeyName(parentPageIndex, questionIndex, 1) %>' type="text" value="" />
 									<div style="clear:both;"></div>
 								</div>
 							</div>
@@ -143,9 +143,9 @@
 	%>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_ANSWER %>" />
-		<portlet:param name="<%= ConfigConstants.CP_PAGE_INDEX %>" value="<%=pageIndexString%>" />
-		<portlet:param name="<%= ConfigConstants.CP_QUESTION_INDEX %>" value="<%=questionIndexString%>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= JspConstants.CMD_ADD_ANSWER %>" />
+		<portlet:param name="<%= JspConstants.CP_PAGE_INDEX %>" value="<%=pageIndexString%>" />
+		<portlet:param name="<%= JspConstants.CP_QUESTION_INDEX %>" value="<%=questionIndexString%>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(

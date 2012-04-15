@@ -30,8 +30,8 @@
 	</div>
 	<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 	<div>
-		<aui:input label="exam-answer-title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
-		<aui:input label="exam-answer-key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
+		<aui:input label="exam-answer-title" name='<%= JspConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
+		<aui:input label="exam-answer-key" name='<%= JspConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
 		<div style="clear: both;"></div>
 	</div>
 </div>
