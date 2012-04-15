@@ -118,6 +118,11 @@ public class ExamPortlet extends MVCPortlet {
      */
     public static Map<String, List<String>> getQuestionData(RenderRequest request, PortletPreferences preferences) {
 		long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+		
+		if (examConfigId == -1L) {
+			return null;
+		}
+		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		try {
 			ExamConfig examConfig = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
