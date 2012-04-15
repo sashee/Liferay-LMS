@@ -36,9 +36,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-/**
- * TODO
- */
 public class ExamPortlet extends MVCPortlet {
 	
 	/**
@@ -104,7 +101,6 @@ public class ExamPortlet extends MVCPortlet {
 			}
 			UserLocalServiceUtil.addRoleUsers(existing.getPrimaryKey(), new long[] { user.getPrimaryKey() });
         }
-
     }
     
     /**

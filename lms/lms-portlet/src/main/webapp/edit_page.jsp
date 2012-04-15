@@ -55,31 +55,30 @@
 								for (String questionKey : questionKeys) {
 									request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
 									request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONDATA, questions.get(questionKey));
-					%>
+								%>
 						
-						<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
-							<div class="row-fields">
-								<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
-							</div>
-						</div>
+									<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
+										<div class="row-fields">
+											<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
+										</div>
+									</div>
 						
-						<%
-													questionIndex++;
-															}
-														} else {
-															request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
-												%>
+								<%
+									questionIndex++;
+								}
+							} else {
+								request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
+								%>
 					
-					<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
-						<div class="row-fields">
-							<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
-						</div>
-					</div>
-					
-					<%
-											questionIndex++;
-												}
-										%>
+									<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
+										<div class="row-fields">
+											<liferay-util:include page="/edit_question.jsp" servletContext="<%= application %>" />
+										</div>
+									</div>
+								<%
+									questionIndex++;
+							}
+		%>
 		</aui:fieldset>
 		<br/>
 	</div>
@@ -90,8 +89,8 @@
 	var examPage = A.one('#examPage<%=pageIndex%>');
 	
 	<%
-	String pageIndexString = pageIndex + "";
-%>
+		String pageIndexString = pageIndex + "";
+	%>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="<%= Constants.CMD %>" value="<%= JspConstants.CMD_ADD_QUESTION %>" />

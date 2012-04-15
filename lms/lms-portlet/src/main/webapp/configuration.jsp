@@ -27,20 +27,20 @@
 	
 	<aui:select label="exam-id" name='<%= JspConstants.QP_EXAM_CONFIG_ID %>'>
 	
-		<%
-				long examConfigId = GetterUtil.getLong(request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
-			%>
+	<%
+		long examConfigId = GetterUtil.getLong(request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
+	%>
 		
-		<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new-exam" /></aui:option>
+	<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new-exam" /></aui:option>
 		
-		<%
-					List<Long> examConfigIds = (List<Long>)request.getAttribute(JspConstants.RA_CONFIGURATION_EXAM_CONFIGS);
-					for(long id : examConfigIds) {
-				%>
-					<aui:option selected='<%= examConfigId == id %>' value="<%= id %>"><%=id%></aui:option>
-				<%
-					}
-				%>
+	<%
+		List<Long> examConfigIds = (List<Long>)request.getAttribute(JspConstants.RA_CONFIGURATION_EXAM_CONFIGS);
+		for(long id : examConfigIds) {
+	%>
+		<aui:option selected='<%= examConfigId == id %>' value="<%= id %>"><%=id%></aui:option>
+	<%
+		}
+	%>
 	</aui:select>
 	<%
 		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('" + JspConstants.CMD_CHANGE_EXAM + "');";
@@ -79,20 +79,20 @@
 						</div>
 						
 						<%
-													index++;
-															}
-														} else {
-															request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
-												%>
-					<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
-						<div class="row-fields">
-							<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
-						</div>
-					</div>
-					<%
-						index++;
+									index++;
+								}
+							} else {
+								request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
+						%>
+							<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
+								<div class="row-fields">
+									<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
+								</div>
+							</div>
+							<%
+								index++;
 							}
-					%>
+			%>
 		</aui:fieldset>
 	</liferay-ui:panel>
 	
