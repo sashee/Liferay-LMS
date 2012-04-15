@@ -22,10 +22,10 @@
 </liferay-portlet:renderURL>
 
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= ConfigConstants.CMD_UPDATE %>" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= JspConstants.CMD_UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirectAfterUrl %>" />
 	
-	<aui:select label="exam-id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
+	<aui:select label="exam-id" name='<%= JspConstants.QP_EXAM_CONFIG_ID %>'>
 	
 		<%
 				long examConfigId = GetterUtil.getLong(request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
@@ -101,9 +101,9 @@
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
 			String evaluatorScript = (String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
 		%>
-		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
+		<aui:input type="checkbox" name="<%= JspConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
 		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
-			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="exam-code" value="<%= evaluatorScript %>" />
+			<aui:input type="textarea" name="<%= JspConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="exam-code" value="<%= evaluatorScript %>" />
 		</div>
 		<aui:button type="submit" value="exam-save" /> 
 	</aui:button-row>
@@ -115,7 +115,7 @@
 	var examPages = A.one('.examPages');
 
 	<liferay-portlet:renderURL portletConfiguration="true" var="editFieldURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_PAGE %>" />
+		<portlet:param name="<%= Constants.CMD %>" value="<%= JspConstants.CMD_ADD_PAGE %>" />
 	</liferay-portlet:renderURL>
 	
 	new Liferay.AutoFields(
