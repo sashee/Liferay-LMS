@@ -228,22 +228,34 @@ public interface ExamAnswerLocalService extends PersistedModelLocalService {
         long groupId, long userId, long examConfigId)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    /**
+    * Appends the user's answers to the already persisted object (if present, if not, then create it)
+    */
     public void appendAnswers(long companyId, long groupId, long userId,
         long examConfigId, java.lang.String pageName,
         java.util.Map<java.lang.String, java.lang.String> newAnswers)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    /**
+    * Returns true if the user already answered the exams on the given page
+    */
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public boolean isPageAnswered(long companyId, long groupId, long userId,
         long examConfigId, java.lang.String pageName)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    /**
+    * Returns the answers for the exam given by a user
+    */
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public hu.advancedweb.lms.evaluation.ExamAnswers getExamAnswers(
         long companyId, long groupId, long userId, long examConfigId,
         java.lang.String pageName)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    /**
+    * Returns the evaluation for a given test and a user
+    */
     public hu.advancedweb.lms.evaluation.ExamValidationResult evaluate(
         long companyId, long groupId, long userId, long examConfigId)
         throws com.liferay.portal.kernel.exception.PortalException,

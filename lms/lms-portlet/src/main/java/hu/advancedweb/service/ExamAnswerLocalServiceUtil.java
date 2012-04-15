@@ -262,6 +262,9 @@ public class ExamAnswerLocalServiceUtil {
                    .getExamAnswer(companyId, groupId, userId, examConfigId);
     }
 
+    /**
+    * Appends the user's answers to the already persisted object (if present, if not, then create it)
+    */
     public static void appendAnswers(long companyId, long groupId, long userId,
         long examConfigId, java.lang.String pageName,
         java.util.Map<java.lang.String, java.lang.String> newAnswers)
@@ -271,6 +274,9 @@ public class ExamAnswerLocalServiceUtil {
             newAnswers);
     }
 
+    /**
+    * Returns true if the user already answered the exams on the given page
+    */
     public static boolean isPageAnswered(long companyId, long groupId,
         long userId, long examConfigId, java.lang.String pageName)
         throws com.liferay.portal.kernel.exception.SystemException {
@@ -279,6 +285,9 @@ public class ExamAnswerLocalServiceUtil {
             pageName);
     }
 
+    /**
+    * Returns the answers for the exam given by a user
+    */
     public static hu.advancedweb.lms.evaluation.ExamAnswers getExamAnswers(
         long companyId, long groupId, long userId, long examConfigId,
         java.lang.String pageName)
@@ -288,6 +297,9 @@ public class ExamAnswerLocalServiceUtil {
             pageName);
     }
 
+    /**
+    * Returns the evaluation for a given test and a user
+    */
     public static hu.advancedweb.lms.evaluation.ExamValidationResult evaluate(
         long companyId, long groupId, long userId, long examConfigId)
         throws com.liferay.portal.kernel.exception.PortalException,

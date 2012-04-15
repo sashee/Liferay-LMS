@@ -80,16 +80,22 @@ public class ExamAnswerLocalServiceImpl extends ExamAnswerLocalServiceBaseImpl {
 		return JSONObject.toJSONString(ans.answers);
 	}
 
+	/** Appends the user's answers to the already persisted object (if present, if not, then create it) */
 	public void appendAnswers(long companyId, long groupId, long userId, long examConfigId, String pageName, Map<String, String> newAnswers) throws SystemException {
-		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
-		if (answer == null) {
-			ExamAnswerLocalServiceUtil.createExamAnswer(companyId, groupId, userId, appendAnswers("", pageName, newAnswers), new Date(), examConfigId);
-		} else {
-			answer.setAnswers(appendAnswers(answer.getAnswers(), pageName, newAnswers));
-			ExamAnswerLocalServiceUtil.updateExamAnswer(answer);
+		try {
+			ExamAnswer answer = getExamAnswer(companyId, groupId, userId, examConfigId);
+			if (answer == null) {
+				createExamAnswer(companyId, groupId, userId, appendAnswers("", pageName, newAnswers), new Date(), examConfigId);
+			} else {
+				answer.setAnswers(appendAnswers(answer.getAnswers(), pageName, newAnswers));
+				updateExamAnswer(answer);
+			}
+		} finally {
+			examAnswerPersistence.clearCache();// TODO:workaround
 		}
 	}
 
+	/** Returns true if the user already answered the exams on the given page */
 	public boolean isPageAnswered(long companyId, long groupId, long userId, long examConfigId, String pageName) throws SystemException {
 		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
 		if (answer == null) {
@@ -99,6 +105,7 @@ public class ExamAnswerLocalServiceImpl extends ExamAnswerLocalServiceBaseImpl {
 		return new ExamAnswers(answer.getAnswers()).answers.containsKey(pageName);
 	}
 
+	/** Returns the answers for the exam given by a user */
 	public ExamAnswers getExamAnswers(long companyId, long groupId, long userId, long examConfigId, String pageName) throws SystemException {
 		ExamAnswer answer = ExamAnswerLocalServiceUtil.getExamAnswer(companyId, groupId, userId, examConfigId);
 		if (answer == null) {
@@ -108,6 +115,7 @@ public class ExamAnswerLocalServiceImpl extends ExamAnswerLocalServiceBaseImpl {
 		return new ExamAnswers(answer.getAnswers());
 	}
 
+	/** Returns the evaluation for a given test and a user */
 	public ExamValidationResult evaluate(long companyId, long groupId, long userId, long examConfigId) throws PortalException, SystemException {
 		ExamConfig config = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
 

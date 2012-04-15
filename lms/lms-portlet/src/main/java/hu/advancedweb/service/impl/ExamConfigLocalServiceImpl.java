@@ -45,7 +45,7 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		result.setQuestions(questions);
 		result.setEvaluator(evaluator);
 		result = updateExamConfig(result);
-		examConfigPersistence.clearCache();
+		examConfigPersistence.clearCache();// TODO:workaround
 		return result;
 
 	}
@@ -81,6 +81,7 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		return result.toString();
 	}
 
+	/** Updates the config */
 	public ExamConfig updateExamConfig(long id, ExamTest test, Optional<String> evaluator, Optional<DefaultExamEvaluatorLogic> evaluatorLogic) throws PortalException, SystemException {
 		Preconditions.checkArgument(evaluator.isPresent() && evaluatorLogic.isPresent() == false || evaluator.isPresent() == false && evaluatorLogic.isPresent(), "Evaluator must be present iff evaluatorlogic is absent");
 

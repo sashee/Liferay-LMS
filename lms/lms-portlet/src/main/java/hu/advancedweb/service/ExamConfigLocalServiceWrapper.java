@@ -254,6 +254,9 @@ public class ExamConfigLocalServiceWrapper implements ExamConfigLocalService,
             test, evaluator, evaluatorLogic);
     }
 
+    /**
+    * Updates the config
+    */
     public hu.advancedweb.model.ExamConfig updateExamConfig(long id,
         hu.advancedweb.lms.evaluation.ExamTest test,
         com.google.common.base.Optional<java.lang.String> evaluator,
