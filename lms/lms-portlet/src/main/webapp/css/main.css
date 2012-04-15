@@ -43,3 +43,11 @@
 .lms-portlet .lmsViewQuestionTitleRow {
 	padding-top: 20px;
 }
+
+.lms-portlet div.errorMessage {
+	font-weight: bold;
+	color: red;
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid red;
+}
