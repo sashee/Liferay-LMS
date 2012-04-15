@@ -1,7 +1,6 @@
 package hu.advancedweb.lms.action;
 
 import hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic;
-import hu.advancedweb.lms.evaluation.ExamEvaluator;
 import hu.advancedweb.lms.evaluation.ExamTest;
 import hu.advancedweb.lms.portlet.ConfigConstants;
 import hu.advancedweb.model.ExamConfig;
@@ -9,7 +8,6 @@ import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -91,11 +89,11 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
 			
 			if (examConfigId == -1L) {
-				ExamConfig config = ExamEvaluator.createExamConfig(PortalUtil.getCompanyId(actionRequest), themeDisplay.getLayout().getGroupId(), examTest, evaluator, evaluatorLogic);
+				ExamConfig config = ExamConfigLocalServiceUtil.createExamConfig(PortalUtil.getCompanyId(actionRequest), themeDisplay.getLayout().getGroupId(), examTest, evaluator, evaluatorLogic);
 				String newValue = config.getId() + "";
 				preferences.setValue(ConfigConstants.PREFERENCE_EXAMID, newValue);
 			} else {
-				ExamEvaluator.updateExamConfig(examConfigId, examTest, evaluator, evaluatorLogic);
+				ExamConfigLocalServiceUtil.updateExamConfig(examConfigId, examTest, evaluator, evaluatorLogic);
 			}
 		} else {
 			// unknown command

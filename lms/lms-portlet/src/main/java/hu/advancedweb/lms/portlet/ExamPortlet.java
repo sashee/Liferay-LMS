@@ -1,10 +1,10 @@
 package hu.advancedweb.lms.portlet;
 
 import hu.advancedweb.lms.evaluation.ExamAnswers;
-import hu.advancedweb.lms.evaluation.ExamEvaluator;
 import hu.advancedweb.lms.evaluation.ExamTest;
 import hu.advancedweb.lms.evaluation.ExamValidationResult;
 import hu.advancedweb.model.ExamConfig;
+import hu.advancedweb.service.ExamAnswerLocalServiceUtil;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class ExamPortlet extends MVCPortlet {
 			}
 		}
 		
-		ExamEvaluator.appendAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "", answerMap);
+		ExamAnswerLocalServiceUtil.appendAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "", answerMap);
     	
 		
 		/*
@@ -140,7 +140,7 @@ public class ExamPortlet extends MVCPortlet {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
     	
-			ExamAnswers examAnswers = ExamEvaluator.getExamAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
+			ExamAnswers examAnswers = ExamAnswerLocalServiceUtil.getExamAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
 			
 			if (examAnswers == null) {
 				return new HashMap<String, String>();
@@ -165,7 +165,7 @@ public class ExamPortlet extends MVCPortlet {
     	try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
-			ExamValidationResult validationData = ExamEvaluator.evaluate(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId);
+			ExamValidationResult validationData = ExamAnswerLocalServiceUtil.evaluate(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId);
 			return validationData;
     	} catch (SystemException e) {
 			e.printStackTrace();
@@ -242,7 +242,7 @@ public class ExamPortlet extends MVCPortlet {
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
-			boolean isPageAnswered = ExamEvaluator.isPageAnswered(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
+			boolean isPageAnswered = ExamAnswerLocalServiceUtil.isPageAnswered(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
 			return isPageAnswered;
 		} catch (PortalException e) {
 			e.printStackTrace();
