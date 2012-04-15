@@ -67,7 +67,7 @@
 					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
 				<aui:input label="exam-question-answer" name='<%= JspConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="" />
-				<aui:input label="exam-question-point" name='<%= JspConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' type="text" value="" />
+				<aui:input type="number" min="0" max="100" label="exam-question-point" name='<%= JspConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' value="" />
 				<div style="clear: both;"></div>
 			</div>
 		
