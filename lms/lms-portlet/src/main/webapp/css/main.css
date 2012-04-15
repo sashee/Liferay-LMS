@@ -4,6 +4,14 @@
 	padding: 5px;
 }
 
+.lmsConfiguration input:invalid, .lmsConfiguration textarea:invalid {
+	background: red;						
+}
+
+.lmsConfiguration .aui-field .aui-field-content .aui-field-element {
+	display: block;
+}
+
 .lmsConfiguration .field-title {
 	font-weight: bold;
 }

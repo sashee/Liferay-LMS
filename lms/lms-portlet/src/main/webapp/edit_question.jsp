@@ -55,7 +55,7 @@
 	<div id="examQuestion<%=questionIndex%>">
 		<aui:fieldset cssClass="rows-container examQuestion">
 			<div>
-				<aui:input label="exam-question-title" name='<%= JspConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
+				<aui:input required="true" label="exam-question-title" name='<%= JspConstants.getQuestionTitleName(parentPageIndex, questionIndex) %>' type="text" value="<%= questionData.get(1) %>" />
 <%-- 				<aui:input label="key" name='<%= "key" + fieldIdSuffix %>' type="text" value="" /> --%>
 				<div style="clear:both;"></div>
 				<%
