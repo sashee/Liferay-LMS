@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="hu.advancedweb.service.ExamAnswerLocalService" class="hu.advancedweb.service.impl.ExamAnswerLocalServiceImpl" />
+	<bean id="hu.advancedweb.service.ExamAnswerLocalServiceUtil" class="hu.advancedweb.service.ExamAnswerLocalServiceUtil">
+		<property name="service" ref="hu.advancedweb.service.ExamAnswerLocalService" />
+	</bean>
+	<bean id="hu.advancedweb.service.persistence.ExamAnswerPersistence" class="hu.advancedweb.service.persistence.ExamAnswerPersistenceImpl" parent="basePersistence" />
+	<bean id="hu.advancedweb.service.ExamConfigLocalService" class="hu.advancedweb.service.impl.ExamConfigLocalServiceImpl" />
+	<bean id="hu.advancedweb.service.ExamConfigLocalServiceUtil" class="hu.advancedweb.service.ExamConfigLocalServiceUtil">
+		<property name="service" ref="hu.advancedweb.service.ExamConfigLocalService" />
+	</bean>
+	<bean id="hu.advancedweb.service.persistence.ExamConfigPersistence" class="hu.advancedweb.service.persistence.ExamConfigPersistenceImpl" parent="basePersistence" />
+</beans>

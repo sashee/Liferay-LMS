@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="hu.advancedweb.model.ExamAnswer">
+		<field name="id" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="Long" />
+		<field name="answers" type="String">
+			<hint name="max-length">50000</hint>
+		</field>
+		<field name="date" type="Date" />
+		<field name="examConfigId" type="Long" />
+	</model>
+	<model name="hu.advancedweb.model.ExamConfig">
+		<field name="id" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="questions" type="String">
+			<hint name="max-length">50000</hint>
+		</field>
+		<field name="evaluator" type="String">
+			<hint name="max-length">50000</hint>
+		</field>
+	</model>
+</model-hints>

@@ -2,4 +2,4 @@
 mvn install
 
 # build-war, build service
-mvn clean liferay:build-service generate-resources install
+mvn clean compile liferay:build-service install

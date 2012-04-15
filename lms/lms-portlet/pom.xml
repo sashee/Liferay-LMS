@@ -83,40 +83,6 @@
 							</replacements>
 						</configuration>
 					</execution>
-					<execution>
-						<id>ReplaceModelHints</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-						<configuration>
-							<file>src/main/resources/META-INF/portlet-model-hints.xml</file>
-							<ignoreMissingFile>true</ignoreMissingFile>
-							<replacements>
-								<replacement>
-									<token><![CDATA[(\s*<field .* type="String" .*)/>]]></token>
-									<value><![CDATA[$1 ><hint name="max-length">50000</hint></field>]]></value>
-								</replacement>
-							</replacements>
-						</configuration>
-					</execution>
-					<execution>
-						<id>ReplaceSql</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-						<configuration>
-							<file>src/main/webapp/WEB-INF/sql/tables.sql</file>
-							<ignoreMissingFile>true</ignoreMissingFile>
-							<replacements>
-								<replacement>
-									<token><![CDATA[(.*)VARCHAR\(75\)(.*)]]></token>
-									<value><![CDATA[$1STRING$2]]></value>
-								</replacement>
-							</replacements>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>
