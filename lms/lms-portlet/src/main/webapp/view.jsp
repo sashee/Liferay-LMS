@@ -108,6 +108,8 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 				
 			String type = question.get(0);
 			String title = question.get(1);
+			String answerKeys = question.get(2);
+			String answerTitles = question.get(3);
 				
 			%>
 			<div class="viewQuestionBox">
@@ -115,21 +117,33 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 				<div class="lmsViewQuestionTitleRow"><b><%= questionNumber %>. <liferay-ui:message key="exam-view-question-title" /></b><br/><span><%= title %></span></div>
 				<div class="lmsViewYourAnswerTitleRow"><i><liferay-ui:message key="exam-view-question-your-answer" /></i></div>
 				
-				
-				
-				
-				
-				
+				<%
+					if (type.equals("text")) {
+				%>
+						<input disabled style="color:black;" type="text" value="<%= answerData.get(key) %>" name="<%= key %>" />
+				<%
+					} else if (type.equals("radio") || type.equals("checkbox")) {
+						String[] answerKeysArray = answerKeys.split(",");
+						String[] answerTitlesArray = answerTitles.split(",");
 						
-				
-				
-				
-			
-				<div><b><%= key %>, <%= title %></b></div>
-				<div><i><%= answerData.get(key) %></i></div>
-				<div></div>
-				<div style='color:<%= questionScore == 0 ? "red" : "green"%>;'><i><%= questionScore %></i></div>
-				<div style='color:<%= questionScore == 0 ? "red" : "green"%>;'><i><%= questionCorrectAnswer %></i></div>
+						for(int i = 0; i<answerKeysArray.length; i++) {
+							%>
+								<label><%= answerTitlesArray[i] %></label>
+								
+								<% if (answerData.get(key).equals(answerKeysArray[i])) { %>
+									<input style="color:black;" disabled type="<%= type %>" name="<%= key %>" value="<%= answerKeysArray[i] %>" checked />
+								<% } else { %>
+									<input style="color:black;" disabled type="<%= type %>" name="<%= key %>" value="<%= answerKeysArray[i] %>" />
+								<% } %>
+							<%
+						}
+					%>
+				<% } %>
+				<br/>
+				<div style='color:<%= questionScore == 0 ? "red" : "green"%>;'><b><liferay-ui:message key="exam-view-question-point" /> <i><%= questionScore %></i></b></div>
+				<% if(questionScore == 0) { %>
+					<div style='color:red;'><b><liferay-ui:message key="exam-view-question-correct-answer" /> <i><%= questionCorrectAnswer %></i></b></div>
+				<% } %>
 			</div>
 			<%
 		}
