@@ -19,9 +19,16 @@
 <liferay-ui:success key="exampagevalidated" message="exampagevalidated" />
 
 <portlet:actionURL name="submitExamPage" var="actionUrl" />
-
 <%
-if (!ExamPortlet.isPageAnswered(request, preferences )) {
+	boolean hasParentPage = true;
+	try {
+		LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
+	} catch (Exception e) {
+		hasParentPage = false;
+	}
+%>
+<%
+if (!ExamPortlet.isPageAnswered(request, preferences ) && hasParentPage) {
 	// exam form
 %>
 	<h3><liferay-ui:message key="exam-view-exam-form-title" /></h3>
@@ -82,7 +89,7 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 			%>
 		</aui:fieldset>
 	</aui:form>
-<% } else {
+<% } else if (hasParentPage) {
 	%>
 		<h3><liferay-ui:message key="exam-view-result-form-title" /></h3>
 	<%
@@ -161,5 +168,9 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 		<% 
 		} 
 	}
-} 
+} else  {
+	%>
+		<div class="errorMessage"><liferay-ui:message key="exam-view-no-parent-page" /></div>
+	<%
+}
 %>
