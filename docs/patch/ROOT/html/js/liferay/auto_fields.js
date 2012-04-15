@@ -85,10 +85,10 @@ AUI.add(
 							'click',
 							function(event) {
 							
-								// DODI
+								// >>>>>> FIX1
 								event.stopPropagation();
 								event.stopImmediatePropagation();
-								// /DODI
+								// <<<<<< FIX1
 							
 								var link = event.currentTarget;
 								var currentRow = link.ancestor('.lfr-form-row');
@@ -240,7 +240,7 @@ AUI.add(
 					serialize: function(filter) {
 						var instance = this;
 			
-						// DODI
+						// >>>>>> FIX2
 						var visibleRows = instance._contentBox.all('.lfr-form-row:visible'); 
 						var visibleRowsDescendants = instance._contentBox.all('.lfr-form-row:visible .lfr-form-row:visible');
 						visibleRows._nodes = visibleRows._nodes.filter(
@@ -253,7 +253,7 @@ AUI.add(
 								return true;
 							}
 						);
-						// /DODI
+						// <<<<<<< FIX2
 						
 						var serializedData = [];
 

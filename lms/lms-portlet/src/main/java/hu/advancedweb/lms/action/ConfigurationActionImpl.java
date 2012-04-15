@@ -36,7 +36,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 
 	public void processAction(PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
-		// debug
+		// DEBUG
 //		System.out.println("------------------------");
 //
 //		Enumeration<?> parms = actionRequest.getParameterNames ();
@@ -54,6 +54,9 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 //			System.out.println(string);
 //		}
 //		System.out.println("----------------------");
+		
+		// DEBUG
+		System.out.println(" ------ Page Order: " + actionRequest.getParameter(JspConstants.QP_PAGE_FIELD_INDEXES));
 		
 		String portletResource = ParamUtil.getString(actionRequest, "portletResource");
 		
