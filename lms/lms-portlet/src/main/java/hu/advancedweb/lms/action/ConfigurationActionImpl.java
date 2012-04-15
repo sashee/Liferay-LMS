@@ -2,7 +2,7 @@ package hu.advancedweb.lms.action;
 
 import hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic;
 import hu.advancedweb.lms.evaluation.ExamTest;
-import hu.advancedweb.lms.portlet.ConfigConstants;
+import hu.advancedweb.lms.portlet.JspConstants;
 import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
@@ -63,17 +63,17 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		
 		String cmd = actionRequest.getParameter(Constants.CMD);
 		
-		if (cmd.equals(ConfigConstants.CMD_CHANGE_EXAM)) {
+		if (cmd.equals(JspConstants.CMD_CHANGE_EXAM)) {
 			// Modify selected Exam in portlet prefs.
-			String newValue = actionRequest.getParameter(ConfigConstants.QP_EXAM_CONFIG_ID);
-			preferences.setValue(ConfigConstants.PREFERENCE_EXAMID, newValue);
+			String newValue = actionRequest.getParameter(JspConstants.QP_EXAM_CONFIG_ID);
+			preferences.setValue(JspConstants.PREFERENCE_EXAMID, newValue);
 			
-		} else if (cmd.equals(ConfigConstants.CMD_UPDATE)) {
+		} else if (cmd.equals(JspConstants.CMD_UPDATE)) {
 			// Create or update Exam Config
 			ExamTest examTest = new ExamTest();
 			DefaultExamEvaluatorLogic examEvaluatorLogic = new DefaultExamEvaluatorLogic();
-			String evaluatorScriptText = actionRequest.getParameter(ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT);
-			String evaluatorLogicAutogenerate = actionRequest.getParameter(ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC);
+			String evaluatorScriptText = actionRequest.getParameter(JspConstants.QP_GENERATE_EVALUATOR_SCRIPT);
+			String evaluatorLogicAutogenerate = actionRequest.getParameter(JspConstants.QP_GENERATE_EVALUATOR_LOGIC);
 			
 			fillExamTest(examTest, examEvaluatorLogic, actionRequest);
 			
@@ -86,12 +86,12 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 				evaluator = Optional.of(evaluatorScriptText);
 			}
 			
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 			
 			if (examConfigId == -1L) {
 				ExamConfig config = ExamConfigLocalServiceUtil.createExamConfig(PortalUtil.getCompanyId(actionRequest), themeDisplay.getLayout().getGroupId(), examTest, evaluator, evaluatorLogic);
 				String newValue = config.getId() + "";
-				preferences.setValue(ConfigConstants.PREFERENCE_EXAMID, newValue);
+				preferences.setValue(JspConstants.PREFERENCE_EXAMID, newValue);
 			} else {
 				ExamConfigLocalServiceUtil.updateExamConfig(examConfigId, examTest, evaluator, evaluatorLogic);
 			}
@@ -122,22 +122,22 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		String cmd = ParamUtil.getString(renderRequest, Constants.CMD);
 		
 		// Render Command Params
-		String pageIndexParam = ParamUtil.getString(renderRequest, ConfigConstants.CP_PAGE_INDEX);
+		String pageIndexParam = ParamUtil.getString(renderRequest, JspConstants.CP_PAGE_INDEX);
 		if (pageIndexParam != null) {
-			renderRequest.setAttribute(ConfigConstants.RA_PAGE_INDEX, pageIndexParam + "");
+			renderRequest.setAttribute(JspConstants.RA_PAGE_INDEX, pageIndexParam + "");
 		}
-		String questionIndexParam = ParamUtil.getString(renderRequest, ConfigConstants.CP_QUESTION_INDEX);
+		String questionIndexParam = ParamUtil.getString(renderRequest, JspConstants.CP_QUESTION_INDEX);
 		if (questionIndexParam != null) {
-			renderRequest.setAttribute(ConfigConstants.RA_QUESTION_INDEX, questionIndexParam + "");
+			renderRequest.setAttribute(JspConstants.RA_QUESTION_INDEX, questionIndexParam + "");
 		}
 		
-		if (cmd.equals(ConfigConstants.CMD_ADD_PAGE)) {
+		if (cmd.equals(JspConstants.CMD_ADD_PAGE)) {
 			// Render page fragment
 			return "/edit_page.jsp";
-		} else if (cmd.equals(ConfigConstants.CMD_ADD_QUESTION)) {
+		} else if (cmd.equals(JspConstants.CMD_ADD_QUESTION)) {
 			// Render question fragment
 			return "/edit_question.jsp";
-		} else if (cmd.equals(ConfigConstants.CMD_ADD_ANSWER)) {
+		} else if (cmd.equals(JspConstants.CMD_ADD_ANSWER)) {
 			// Render answer fragment
 			return "/edit_answer.jsp";
 		} else {
@@ -145,7 +145,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			
 			
 			//  Selected Exam config
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 			ExamConfig selectedExamConfig = null;
 			boolean examConfigIdFound = false;
 			
@@ -162,14 +162,14 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			}
 			Collections.sort(examConfigIds);
 			
-			renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS, examConfigIds);
+			renderRequest.setAttribute(JspConstants.RA_CONFIGURATION_EXAM_CONFIGS, examConfigIds);
 			
 			if (examConfigIdFound) {
-				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, examConfigId);
-				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST, new ExamTest(selectedExamConfig.getQuestions()));
-				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT, selectedExamConfig.getEvaluator());
+				renderRequest.setAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, examConfigId);
+				renderRequest.setAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST, new ExamTest(selectedExamConfig.getQuestions()));
+				renderRequest.setAttribute(JspConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT, selectedExamConfig.getEvaluator());
 			} else {
-				renderRequest.setAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, -1L);
+				renderRequest.setAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG, -1L);
 			}
 			
 			return "/configuration.jsp";
@@ -177,7 +177,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 	}
 	
 	private void fillExamTest(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest) {
-		String[] pageFieldIndexes = actionRequest.getParameter(ConfigConstants.QP_PAGE_FIELD_INDEXES).split(",");
+		String[] pageFieldIndexes = actionRequest.getParameter(JspConstants.QP_PAGE_FIELD_INDEXES).split(",");
 		
 		int targetPageNum = 1;
 		for (String pageFieldIndex : pageFieldIndexes) {
@@ -192,7 +192,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 	}
 	
 	private void addPage(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest, int pageNum, int targetPageNum) {
-		String[] questionFieldIndexes = actionRequest.getParameter(ConfigConstants.getQuestionFieldIndexName(pageNum)).split(",");
+		String[] questionFieldIndexes = actionRequest.getParameter(JspConstants.getQuestionFieldIndexName(pageNum)).split(",");
 		
 		int targetQuestionNum = 1;
 		for (String questionFieldIndex : questionFieldIndexes) {
@@ -209,8 +209,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 	private void addQuestion(ExamTest examTest, DefaultExamEvaluatorLogic examEvaluatorLogic, ActionRequest actionRequest, int pageNum, int questionNum, int targetPageNum, int targetQuestionNum) {
 		
 		// question data
-		String questionType = actionRequest.getParameter(ConfigConstants.getQuestionTypeName(pageNum, questionNum));
-		String questionTitle = actionRequest.getParameter(ConfigConstants.getQuestionTitleName(pageNum, questionNum));
+		String questionType = actionRequest.getParameter(JspConstants.getQuestionTypeName(pageNum, questionNum));
+		String questionTitle = actionRequest.getParameter(JspConstants.getQuestionTitleName(pageNum, questionNum));
 		
 		List<String> questionData = examTest.tests.get(targetPageNum + "").get(targetQuestionNum + "");
 		questionData.add(questionType);
@@ -220,12 +220,12 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		StringBuffer keyBuffer = new StringBuffer();
 		StringBuffer titleBuffer = new StringBuffer();
 		
-		String[] answerFieldIndexes = actionRequest.getParameter(ConfigConstants.getAnswerFieldIndexName(pageNum, questionNum)).split(",");
+		String[] answerFieldIndexes = actionRequest.getParameter(JspConstants.getAnswerFieldIndexName(pageNum, questionNum)).split(",");
 		for (String answerFieldIndex : answerFieldIndexes) {
 			int answerIndex = Integer.parseInt(answerFieldIndex);
 			
-			String answerKey = actionRequest.getParameter(ConfigConstants.getAnswerKeyName(pageNum, questionNum, answerIndex));
-			String answerTitle = actionRequest.getParameter(ConfigConstants.getAnswerTitleName(pageNum, questionNum, answerIndex));
+			String answerKey = actionRequest.getParameter(JspConstants.getAnswerKeyName(pageNum, questionNum, answerIndex));
+			String answerTitle = actionRequest.getParameter(JspConstants.getAnswerTitleName(pageNum, questionNum, answerIndex));
 			
 			if (answerKey.isEmpty()) {
 				answerKey = " ";
@@ -243,8 +243,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		questionData.add(keyBuffer.toString().substring(1));
 		questionData.add(titleBuffer.toString().substring(1));
 		
-		String questionScore = actionRequest.getParameter(ConfigConstants.getQuestionScoreName(pageNum, questionNum));
-		String questionAnswer = actionRequest.getParameter(ConfigConstants.getQuestionAnswerName(pageNum, questionNum));
+		String questionScore = actionRequest.getParameter(JspConstants.getQuestionScoreName(pageNum, questionNum));
+		String questionAnswer = actionRequest.getParameter(JspConstants.getQuestionAnswerName(pageNum, questionNum));
 		
 		int score = 0;
 		try {

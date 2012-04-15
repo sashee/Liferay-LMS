@@ -40,14 +40,10 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * TODO
  */
 public class ExamPortlet extends MVCPortlet {
-
 	
 	/**
-	 * Az adott teszt oldalt kuldi be.
-	 * Lefut a beallitott automatikus validacio, 
-	 * jogosultsagot kap a kovetkezo oldalra, amihez egy link is meg fog jelenni.
-	 * 
-	 * TODO
+	 * Submits the current exam page.
+	 * If there is a next page, the appropriate permission is given for the user.
 	 * 
 	 * @param request
 	 * @param response
@@ -60,7 +56,7 @@ public class ExamPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute("THEME_DISPLAY");
 		String portletId = (String)request.getAttribute("PORTLET_ID");
 		PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletId);
-		long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+		long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 		Map<String,String> answerMap = new HashMap<String, String>();
 		
 		ExamConfig examConfig = ExamConfigLocalServiceUtil.getExamConfig(examConfigId);
@@ -115,9 +111,10 @@ public class ExamPortlet extends MVCPortlet {
      * Extracts questions for page.
      * @param request
      * @param preferences
+     * @return map of question keys and question parameters
      */
     public static Map<String, List<String>> getQuestionData(RenderRequest request, PortletPreferences preferences) {
-		long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+		long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 		
 		if (examConfigId == -1L) {
 			return null;
@@ -140,10 +137,16 @@ public class ExamPortlet extends MVCPortlet {
 		return null;
 	}
     
+    /**
+     * Extracts user answers for the page.
+     * @param request
+     * @param preferences
+     * @return the current user's answer for the viewed exam
+     */
     public static Map<String,String> getAnswerData(HttpServletRequest request, PortletPreferences preferences) {
     	try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
     	
 			ExamAnswers examAnswers = ExamAnswerLocalServiceUtil.getExamAnswers(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
 			
@@ -165,11 +168,16 @@ public class ExamPortlet extends MVCPortlet {
     	return null;
     }
     
+    /**
+     * Returns exam evaluation data based on the user's previous answers.
+     * @param request
+     * @param preferences
+     * @return the evaluation data for the current test and user
+     */
     public static ExamValidationResult getEvaluationData(HttpServletRequest request, PortletPreferences preferences ) {
-    	
     	try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 			ExamValidationResult validationData = ExamAnswerLocalServiceUtil.evaluate(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId);
 			return validationData;
     	} catch (SystemException e) {
@@ -181,6 +189,7 @@ public class ExamPortlet extends MVCPortlet {
     }
     
     /**
+     * Decides if the current user can view the next page of the exam.
      * @param request
      * @return true, if the current user filled the actual page, and has the special role for the next page.
      * @throws SystemException
@@ -215,17 +224,29 @@ public class ExamPortlet extends MVCPortlet {
 			return false;
 		}
 	}
-
+    
+    /**
+	 * @param themeDisplay
+	 * @return the URL for the exam's next page
+	 */
 	public static String getNextPageUrl(RenderRequest request) throws SystemException, PortalException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		Layout nextPage = getNextPage(themeDisplay);
 		return (nextPage == null) ? null : nextPage.getFriendlyURL();
 	}
-
+	
+	/**
+	 * @param layout
+	 * @return the generated rolename for the given layout
+	 */
 	private static String getRoleNameForLayout(Layout layout) {
 		return "ExamViewFor" + layout.getFriendlyURL().substring(layout.getFriendlyURL().lastIndexOf("/") + 1);
 	}
 	
+	/**
+	 * @param themeDisplay
+	 * @return the layout for the exam's next page
+	 */
 	private static Layout getNextPage(ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
         int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
@@ -237,16 +258,26 @@ public class ExamPortlet extends MVCPortlet {
 		}
 	}
 	
+	/**
+	 * @param themeDisplay
+	 * @return the exam page number currently viewed
+	 */
 	public static int getPageNumber(ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		Layout parent = LayoutLocalServiceUtil.getLayout(themeDisplay.getLayout().getParentPlid());
         int nextPageIndex = parent.getChildren().indexOf(themeDisplay.getLayout()) + 1;
         return nextPageIndex;
 	}
 	
+	/**
+	 * Decides if the current user already answered the page or not.
+	 * @param request
+	 * @param preferences
+	 * @return true, if the current user filled the page
+	 */
 	public static boolean isPageAnswered(HttpServletRequest request, PortletPreferences preferences ) {
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
+			long examConfigId = GetterUtil.getLong(preferences.getValue(JspConstants.PREFERENCE_EXAMID, "-1"));
 			boolean isPageAnswered = ExamAnswerLocalServiceUtil.isPageAnswered(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId, getPageNumber(themeDisplay) + "");
 			return isPageAnswered;
 		} catch (PortalException e) {

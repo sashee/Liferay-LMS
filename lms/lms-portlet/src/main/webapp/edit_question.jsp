@@ -20,29 +20,29 @@
 
 <div class="aui-field-row field-row">
 
-	<% 	
-		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
-		int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
-		int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX));
+	<%
+		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
+			int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
+			int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX));
 
-		if (questionIndexParam != 0) {
-			questionIndex = questionIndexParam;
-		}
-		
-		if (request.getAttribute(ConfigConstants.RA_PAGE_INDEX) != null && !((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX)).isEmpty()) {
-			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX));
-		}
-		
-		List<String> questionData = (List<String>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONDATA);
-		if (questionData == null) {
-			questionData = new ArrayList<String>();
-			questionData.add("");
-			questionData.add("");
-			questionData.add("");
-			questionData.add("");
-		}
-		
-// 		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
+			if (questionIndexParam != 0) {
+		questionIndex = questionIndexParam;
+			}
+			
+			if (request.getAttribute(JspConstants.RA_PAGE_INDEX) != null && !((String)request.getAttribute(JspConstants.RA_PAGE_INDEX)).isEmpty()) {
+		parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_PAGE_INDEX));
+			}
+			
+			List<String> questionData = (List<String>)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONDATA);
+			if (questionData == null) {
+		questionData = new ArrayList<String>();
+		questionData.add("");
+		questionData.add("");
+		questionData.add("");
+		questionData.add("");
+			}
+			
+	// 		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
 	<div class="field-title">
@@ -72,22 +72,22 @@
 			</div>
 		
 			<%
-				String defaultStyleForAnswerContainer = "";
-				if (questionData.get(0).equals("text")) {
-					defaultStyleForAnswerContainer = "z-index:-1;position:absolute;opacity:0;";
-				}
-			%>
+						String defaultStyleForAnswerContainer = "";
+							if (questionData.get(0).equals("text")) {
+								defaultStyleForAnswerContainer = "z-index:-1;position:absolute;opacity:0;";
+							}
+					%>
 		
-			<div style="<%= defaultStyleForAnswerContainer %>" id="<portlet:namespace/>answerContainer_p<%= parentPageIndex %>_q<%=questionIndex%>">
+			<div style="<%=defaultStyleForAnswerContainer%>" id="<portlet:namespace/>answerContainer_p<%=parentPageIndex%>_q<%=questionIndex%>">
 				<%
-					ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
-					
-					String[] answerKeys = questionData.get(2).split(",");
-					String[] answerTitle = questionData.get(3).split(",");
-					
-					if (!questionData.get(2).isEmpty()) {
-						for (int answerIndex = 1; answerIndex <= answerKeys.length; answerIndex++) {
-							%>
+					ExamTest examConfigIds = (ExamTest)request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+							
+							String[] answerKeys = questionData.get(2).split(",");
+							String[] answerTitle = questionData.get(3).split(",");
+							
+							if (!questionData.get(2).isEmpty()) {
+								for (int answerIndex = 1; answerIndex <= answerKeys.length; answerIndex++) {
+				%>
 							<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=answerIndex%>">
 								<div class="row-fields">
 									<div class="field-title">
@@ -103,9 +103,9 @@
 								</div>
 							</div>
 							<%
-						}
-					} else {
-						%>
+								}
+										} else {
+							%>
 						<div class="lfr-form-row" id="<portlet:namespace/>answerfieldset<%=1%>">
 							<div class="row-fields">
 								<div class="field-title">
@@ -121,8 +121,8 @@
 							</div>
 						</div>
 						<%
-					}
-					%> 
+							}
+						%> 
 				</div>
 		</aui:fieldset>
 		<br/>
@@ -135,8 +135,12 @@
 	
 	var examQuestion = A.one('#examPage<%=parentPageIndex%> #examQuestion<%=questionIndex%>');
 	
-	<% String pageIndexString = parentPageIndex + ""; %>
-	<% String questionIndexString = questionIndex + ""; %>
+	<%
+ 	String pageIndexString = parentPageIndex + "";
+ %>
+	<%
+		String questionIndexString = questionIndex + "";
+	%>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_ANSWER %>" />
@@ -147,7 +151,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examQuestion,
-			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.getAnswerFieldIndexName(parentPageIndex, questionIndex) %>',
+			fieldIndexes: '<portlet:namespace /><%=JspConstants.getAnswerFieldIndexName(parentPageIndex, questionIndex)%>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'

@@ -56,7 +56,7 @@
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
 
 <%@ page import="hu.advancedweb.lms.portlet.ExamPortlet" %>
-<%@ page import="hu.advancedweb.lms.portlet.ConfigConstants" %>
+<%@ page import="hu.advancedweb.lms.portlet.JspConstants" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamTest" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult.PageValidationResult" %>

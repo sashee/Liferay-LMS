@@ -19,9 +19,9 @@
 
 <div class="aui-field-row field-row">
 	<%
-		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_PAGE_INDEX));
-		int questionIndex = GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_QUESTION_INDEX));
-		int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
+		int parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_PAGE_INDEX));
+			int questionIndex = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_QUESTION_INDEX));
+			int answerIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX)));
 	%>
 
 	<div class="field-title">

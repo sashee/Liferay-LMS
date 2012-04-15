@@ -28,22 +28,22 @@
 	<aui:select label="exam-id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
 	
 		<%
-			long examConfigId = GetterUtil.getLong(request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
-		%>
+				long examConfigId = GetterUtil.getLong(request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
+			%>
 		
 		<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new-exam" /></aui:option>
 		
 		<%
-			List<Long> examConfigIds = (List<Long>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS);
-			for(long id : examConfigIds) {
+					List<Long> examConfigIds = (List<Long>)request.getAttribute(JspConstants.RA_CONFIGURATION_EXAM_CONFIGS);
+					for(long id : examConfigIds) {
 				%>
-					<aui:option selected='<%= examConfigId == id %>' value="<%= id %>"><%= id %></aui:option>
+					<aui:option selected='<%= examConfigId == id %>' value="<%= id %>"><%=id%></aui:option>
 				<%
-			}
-		%>
+					}
+				%>
 	</aui:select>
 	<%
-		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('" + ConfigConstants.CMD_CHANGE_EXAM + "');";
+		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('" + JspConstants.CMD_CHANGE_EXAM + "');";
 	%>
 	<aui:button value="exam-id-change" type="submit" name="change_exam_config" onClick='<%= changeSubmitScript %>'/> 
 	<br /> <br />
@@ -56,21 +56,21 @@
 			</div>
 		
 			<%
-				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
-				
-				Set<String> pageKeys;
-				
-				if (examConfigIds != null) {
-					pageKeys = examConfigIds.tests.keySet();
-				} else {
-					pageKeys = new HashSet<String>();
-				}
-			
-				int index = 1;
-				if (!pageKeys.isEmpty()) {
-					for (String pageKey : pageKeys) {
-						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
-						%>
+						ExamTest examConfigIds = (ExamTest)request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+							
+							Set<String> pageKeys;
+							
+							if (examConfigIds != null) {
+								pageKeys = examConfigIds.tests.keySet();
+							} else {
+								pageKeys = new HashSet<String>();
+							}
+						
+							int index = 1;
+							if (!pageKeys.isEmpty()) {
+								for (String pageKey : pageKeys) {
+									request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
+					%>
 						
 						<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
 							<div class="row-fields">
@@ -79,27 +79,27 @@
 						</div>
 						
 						<%
-						index++;
-					}
-				} else {
-					request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
-					%>
+													index++;
+															}
+														} else {
+															request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX, String.valueOf(index));
+												%>
 					<div class="lfr-form-row" id="<portlet:namespace/>pagefieldset<%=index%>">
 						<div class="row-fields">
 							<liferay-util:include page="/edit_page.jsp" servletContext="<%= application %>" />
 						</div>
 					</div>
 					<%
-					index++;
-				}
-				%>
+						index++;
+							}
+					%>
 		</aui:fieldset>
 	</liferay-ui:panel>
 	
 	<aui:button-row>
 		<%
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
-			String evaluatorScript = (String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
+			String evaluatorScript = (String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
 		%>
 		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
 		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
@@ -121,7 +121,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examPages,
-			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.QP_PAGE_FIELD_INDEXES %>',
+			fieldIndexes: '<portlet:namespace /><%=JspConstants.QP_PAGE_FIELD_INDEXES%>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editFieldURL %>'

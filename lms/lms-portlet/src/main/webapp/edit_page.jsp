@@ -17,8 +17,8 @@
 <%@ include file="/init.jsp" %>
 
 <div class="aui-field-row field-row">
-	<% 
-		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
+	<%
+		int pageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX)));
 	%>
 
 	<div class="field-title">
@@ -37,25 +37,25 @@
 			</div>
 		
 			<%
-				ExamTest examConfigIds = (ExamTest)request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
-				Set<String> questionKeys = new HashSet<String>();
-				Map<String, ? extends List<String>> questions = new HashMap<String, List<String>>();
-				
-				if (examConfigIds != null) {
-					questions = examConfigIds.tests.get(pageIndex + "");
-					if (questions != null) {
-						questionKeys = questions.keySet();
-					}
-				}
-			
-				
-				int questionIndex = 1;
-				
-				if (!questionKeys.isEmpty()) {
-					for (String questionKey : questionKeys) {
-						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
-						request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONDATA, questions.get(questionKey));
-						%>
+						ExamTest examConfigIds = (ExamTest)request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_TEST);
+							Set<String> questionKeys = new HashSet<String>();
+							Map<String, ? extends List<String>> questions = new HashMap<String, List<String>>();
+							
+							if (examConfigIds != null) {
+								questions = examConfigIds.tests.get(pageIndex + "");
+								if (questions != null) {
+									questionKeys = questions.keySet();
+								}
+							}
+						
+							
+							int questionIndex = 1;
+							
+							if (!questionKeys.isEmpty()) {
+								for (String questionKey : questionKeys) {
+									request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
+									request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONDATA, questions.get(questionKey));
+					%>
 						
 						<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
 							<div class="row-fields">
@@ -64,11 +64,11 @@
 						</div>
 						
 						<%
-						questionIndex++;
-					}
-				} else {
-					request.setAttribute(ConfigConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
-					%>
+													questionIndex++;
+															}
+														} else {
+															request.setAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX, String.valueOf(questionIndex));
+												%>
 					
 					<div class="lfr-form-row" id="<portlet:namespace/>questionfieldset<%=questionIndex%>">
 						<div class="row-fields">
@@ -77,9 +77,9 @@
 					</div>
 					
 					<%
-					questionIndex++;
-				}
-			%>
+											questionIndex++;
+												}
+										%>
 		</aui:fieldset>
 		<br/>
 	</div>
@@ -87,9 +87,11 @@
 
 
 <aui:script use="aui-base,liferay-auto-fields">
-	var examPage = A.one('#examPage<%= pageIndex %>');
+	var examPage = A.one('#examPage<%=pageIndex%>');
 	
-	<% String pageIndexString = pageIndex + ""; %>
+	<%
+	String pageIndexString = pageIndex + "";
+%>
 	
 	<liferay-portlet:renderURL portletConfiguration="true" var="editPageURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="<%= Constants.CMD %>" value="<%= ConfigConstants.CMD_ADD_QUESTION %>" />
@@ -99,7 +101,7 @@
 	new Liferay.AutoFields(
 		{
 			contentBox: examPage,
-			fieldIndexes: '<portlet:namespace /><%= ConfigConstants.getQuestionFieldIndexName(pageIndex) %>',
+			fieldIndexes: '<portlet:namespace /><%=JspConstants.getQuestionFieldIndexName(pageIndex)%>',
 			sortable: true,
 			sortableHandle: '.field-label',
 			url: '<%= editPageURL %>'
