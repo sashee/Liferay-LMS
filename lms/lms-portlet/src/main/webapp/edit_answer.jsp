@@ -26,12 +26,12 @@
 
 	<div class="field-title">
 <%-- 		<span class="field-label">Answer <%=answerIndex%> of Question <%=questionIndex%> of <%= parentPageIndex %></span> --%>
-		<span class="field-label">Answer</span>
+		<span class="field-label"><liferay-ui:message key="exam-answer" /></span>
 	</div>
 	<aui:input type="hidden" name='<%= "_field" + answerIndex  %>' />
 	<div>
-		<aui:input label="title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
-		<aui:input label="key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
+		<aui:input label="exam-answer-title" name='<%= ConfigConstants.getAnswerTitleName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
+		<aui:input label="exam-answer-key" name='<%= ConfigConstants.getAnswerKeyName(parentPageIndex, questionIndex, answerIndex) %>' type="text" value="" />
 		<div style="clear: both;"></div>
 	</div>
 </div>

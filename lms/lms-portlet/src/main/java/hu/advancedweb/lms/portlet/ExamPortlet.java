@@ -162,22 +162,16 @@ public class ExamPortlet extends MVCPortlet {
     
     public static ExamValidationResult getEvaluationData(HttpServletRequest request, PortletPreferences preferences ) {
     	
-    	System.out.println("INHERE");
-    	
     	try {
-    		System.out.println("INHERE2");
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long examConfigId = GetterUtil.getLong(preferences.getValue(ConfigConstants.PREFERENCE_EXAMID, "-1"));
-			System.out.println("INHERE3");
 			ExamValidationResult validationData = ExamEvaluator.evaluate(PortalUtil.getCompanyId(request), themeDisplay.getLayout().getGroupId(), themeDisplay.getUser().getUserId(), examConfigId);
-			System.out.println("INHERE4: " + validationData);
 			return validationData;
     	} catch (SystemException e) {
 			e.printStackTrace();
 		} catch (PortalException e) {
 			e.printStackTrace();
 		}
-    	System.out.println("INHERE5");
     	return null;
     }
     

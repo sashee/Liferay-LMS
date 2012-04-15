@@ -23,7 +23,7 @@
 
 	<div class="field-title">
 <%-- 		<span class="field-label">Page <%=pageIndex%></span> --%>
-		<span class="field-label">Page</span>
+		<span class="field-label"><liferay-ui:message key="exam-page" /></span>
 	</div>
 	
 	<aui:input type="hidden" name='<%= "_field" + pageIndex %>' />

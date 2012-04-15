@@ -25,13 +25,13 @@
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= ConfigConstants.CMD_UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirectAfterUrl %>" />
 	
-	<aui:select label="id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
+	<aui:select label="exam-id" name='<%= ConfigConstants.QP_EXAM_CONFIG_ID %>'>
 	
 		<%
 			long examConfigId = GetterUtil.getLong(request.getAttribute(ConfigConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
 		%>
 		
-		<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new" /></aui:option>
+		<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new-exam" /></aui:option>
 		
 		<%
 			List<Long> examConfigIds = (List<Long>)request.getAttribute(ConfigConstants.RA_CONFIGURATION_EXAM_CONFIGS);
@@ -45,10 +45,10 @@
 	<%
 		String changeSubmitScript = renderResponse.getNamespace() + "setSubmitModeAndSubmit('" + ConfigConstants.CMD_CHANGE_EXAM + "');";
 	%>
-	<aui:button value="change" type="submit" name="change_exam_config" onClick='<%= changeSubmitScript %>'/> 
+	<aui:button value="exam-id-change" type="submit" name="change_exam_config" onClick='<%= changeSubmitScript %>'/> 
 	<br /> <br />
 	
-	<liferay-ui:panel collapsible="<%= false %>" extended="<%= true %>" id="exam_fields" persistState="<%= true %>" title="form-fields">
+	<liferay-ui:panel collapsible="<%= false %>" extended="<%= true %>" id="exam_fields" persistState="<%= true %>" title="exam-fields">
 		<aui:fieldset cssClass="rows-container examPages">
 			<div class="dummyContainer">
 				<aui:input name="pagesetdummy" type="text" value="" />
@@ -101,11 +101,11 @@
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
 			String evaluatorScript = (String)request.getAttribute(ConfigConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
 		%>
-		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
+		<aui:input type="checkbox" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
 		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
-			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="code" value="<%= evaluatorScript %>" />
+			<aui:input type="textarea" name="<%= ConfigConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="exam-code" value="<%= evaluatorScript %>" />
 		</div>
-		<aui:button type="submit" /> 
+		<aui:button type="submit" value="exam-save" /> 
 	</aui:button-row>
 </aui:form>
 

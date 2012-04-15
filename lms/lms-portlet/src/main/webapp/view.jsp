@@ -24,6 +24,7 @@
 if (!ExamPortlet.isPageAnswered(request, preferences )) {
 	// exam form
 %>
+	<h3><liferay-ui:message key="exam-view-exam-form-title" /></h3>
 	<!-- Exam form.  -->
 	<aui:form name="fm" action="<%= actionUrl.toString() %>" method="post">
 		<aui:fieldset>
@@ -32,7 +33,9 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 				Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
 
 				if (questions != null) {
+					int questionNumber = 0;
 					for(String key : questions.keySet()) {
+						questionNumber = questionNumber + 1;
 						List<String> question = questions.get(key);
 						
 						String type = question.get(0);
@@ -40,14 +43,18 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 						String answerKeys = question.get(2);
 						String answerTitles = question.get(3);
 						
-						%><div class="viewQuestionBox"><%
+						%><div class="viewQuestionBox">
+							
+							<div class="lmsViewQuestionTitleRow"><b><%= questionNumber %>. <liferay-ui:message key="exam-view-question-title" /></b><br/><span><%= title %></span></div>
+							<div class="lmsViewYourAnswerTitleRow"><i><liferay-ui:message key="exam-view-question-your-answer" /></i></div>
+						
+							<%
 							if (type.equals("text")) {
 							%>
-								<aui:input type="text" label="<%= title %>" name="<%= key %>" />
+								<aui:input type="text" label="" name="<%= key %>" />
 							<%
 							} else if (type.equals("radio") || type.equals("checkbox")) {
 							%>
-								<span><%= title %></span>
 								<% 
 									String[] answerKeysArray = answerKeys.split(",");
 									String[] answerTitlesArray = answerTitles.split(",");
@@ -62,18 +69,23 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 						%></div><%
 						}
 					}
+					%>
+						<aui:button-row>
+							<aui:button type="submit" name="submit" value="exam-view-exam-submit"/>
+						</aui:button-row>
+					<%
 				} else {
 					%>
-						<div>Nincs kérdés definiálva erre az oldalra!</div>
+						<div><liferay-ui:message key="exam-view-no-exam-configured" /></div>
 					<%
 				}
 			%>
-			<aui:button-row>
-				<aui:button type="submit" name="submit"/>
-			</aui:button-row>
 		</aui:fieldset>
 	</aui:form>
 <% } else {
+	%>
+		<h3><liferay-ui:message key="exam-view-result-form-title" /></h3>
+	<%
 	// exam results
 	Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
 	String pageNumber = (ExamPortlet.getPageNumber(themeDisplay)) + "";
@@ -85,8 +97,9 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 	int pageScore = pageResult.score;
 		
 	if (questions != null) {
+		int questionNumber = 0;
 		for(String key : questions.keySet()) {
-			
+			questionNumber = questionNumber + 1;
 			ExerciseValidationResult questionValidationResult = pageResult.exerciseValidations.get(key);
 			int questionScore = questionValidationResult.score;
 			String questionCorrectAnswer = questionValidationResult.text;
@@ -98,6 +111,20 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 				
 			%>
 			<div class="viewQuestionBox">
+				
+				<div class="lmsViewQuestionTitleRow"><b><%= questionNumber %>. <liferay-ui:message key="exam-view-question-title" /></b><br/><span><%= title %></span></div>
+				<div class="lmsViewYourAnswerTitleRow"><i><liferay-ui:message key="exam-view-question-your-answer" /></i></div>
+				
+				
+				
+				
+				
+				
+						
+				
+				
+				
+			
 				<div><b><%= key %>, <%= title %></b></div>
 				<div><i><%= answerData.get(key) %></i></div>
 				<div></div>
@@ -108,7 +135,7 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 		}
 	} else {
 		%>
-			<div>Nincs kérdés definiálva erre az oldalra!</div>
+			<div><liferay-ui:message key="exam-view-no-exam-configured" /></div>
 		<%
 	}
 		
@@ -116,7 +143,7 @@ if (!ExamPortlet.isPageAnswered(request, preferences )) {
 		<% 
 		String nextPageUrl = ExamPortlet.getNextPageUrl(renderRequest);
 		if (nextPageUrl != null) { %>
-			<a href="<%= nextPageUrl %>">Következő oldal</a>
+			<a href="<%= nextPageUrl %>"><liferay-ui:message key="exam-view-next-page" /></a>
 		<% 
 		} 
 	}
