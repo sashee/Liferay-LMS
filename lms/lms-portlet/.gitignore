@@ -1,10 +1,5 @@
 target/
 docroot/WEB-INF/classes
-src/main/java/hu/advancedweb/model
-src/main/java/hu/advancedweb/service/*
 src/main/resources/service.properties
-!src/main/java/hu/advancedweb/service/impl
-src/main/webapp/WEB-INF/sql/*
-src/main/java/hu/advancedweb/NoSuch*Exception.java
 .externalToolBuilders/
 .settings
