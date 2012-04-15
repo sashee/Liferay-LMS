@@ -35,7 +35,6 @@ if (!ExamPortlet.isPageAnswered(request, preferences ) && hasParentPage) {
 	<!-- Exam form.  -->
 	<aui:form name="fm" action="<%= actionUrl.toString() %>" method="post">
 		<aui:fieldset>
-		
 			<%
 				Map<String, List<String>> questions = ExamPortlet.getQuestionData(renderRequest, preferences);
 

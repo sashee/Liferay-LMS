@@ -7,6 +7,9 @@ import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.ExamAnswerLocalServiceUtil;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +49,35 @@ public class ExamPortlet extends MVCPortlet {
 	 * @param response
 	 */
     public void submitExamPage(ActionRequest request, ActionResponse response) throws Exception {
+    	
+    	// DEBUG
+//		System.out.println("------------------------");
+//
+//		Enumeration<?> parms = request.getParameterNames ();
+//		List<String> a = new ArrayList<String>();
+//		
+//		String parmname;
+//	    String parmval;
+//	    String paramvals;
+//		while (parms.hasMoreElements ()) {
+//	        parmname = (String) parms.nextElement ();
+//	        parmval = request.getParameter (parmname);
+//	        String[] parmvals = request.getParameterValues("sports");
+//	        paramvals = "";
+//	        
+//	        if (parmvals != null) {
+//		        for (String string : parmvals) {
+//		        	paramvals = paramvals+ "," + string;
+//				}
+//		        System.out.println(paramvals + " is a paramvals!!");
+//	        }
+//	        a.add(parmname + " : " + parmval);
+//	    }
+//		Collections.sort(a);
+//		for (String string : a) {
+//			System.out.println(string);
+//		}
+//		System.out.println("----------------------");
     	
     	/*
     	 * Save user answers.
