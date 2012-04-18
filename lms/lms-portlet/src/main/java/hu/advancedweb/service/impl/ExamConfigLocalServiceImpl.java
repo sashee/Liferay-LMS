@@ -6,12 +6,16 @@ import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 import hu.advancedweb.service.base.ExamConfigLocalServiceBaseImpl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.javatuples.Pair;
 import org.json.simple.JSONObject;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -60,10 +64,13 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		return createExamConfig(companyId, groupId, questions, evaluatorString);
 	}
 
-	private String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
+	@VisibleForTesting
+	String generateDefaultEvaluatorJavascript(DefaultExamEvaluatorLogic logic) {
 		StringBuilder result = new StringBuilder();
 
 		result.append("/* - Generated Evaluator Logic - */");
+		result.append(System.getProperty("line.separator"));
+		result.append("/* Generated from:" + logic.toJson() + " */");// If you ever change it, also change the rereadDefaultEvaluatorLogic() too
 		result.append(System.getProperty("line.separator"));
 		result.append("function validate(){");
 		result.append(System.getProperty("line.separator"));
@@ -79,6 +86,24 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		result.append("}");
 
 		return result.toString();
+	}
+
+	@VisibleForTesting
+	DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(String evaluatorJavascript) {
+		try {
+			BufferedReader r = new BufferedReader(new StringReader(evaluatorJavascript));
+			String line = null;
+			while ((line = r.readLine()) != null) {
+				if (line.startsWith("/* Generated from:")) {
+					String generated = line.substring("/* Generated from:".length(), line.length() - 3);
+					return DefaultExamEvaluatorLogic.fromJson(generated);
+				}
+			}
+			return null;
+		} catch (IOException ioe) {
+			// Should never happen. Or should it?
+			throw new RuntimeException(ioe);
+		}
 	}
 
 	/** Updates the config */
