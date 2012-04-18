@@ -88,8 +88,7 @@ public class ExamConfigLocalServiceImpl extends ExamConfigLocalServiceBaseImpl {
 		return result.toString();
 	}
 
-	@VisibleForTesting
-	DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(String evaluatorJavascript) {
+	public DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(String evaluatorJavascript) {
 		try {
 			BufferedReader r = new BufferedReader(new StringReader(evaluatorJavascript));
 			String line = null;

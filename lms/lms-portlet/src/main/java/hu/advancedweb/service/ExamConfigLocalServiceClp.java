@@ -26,7 +26,8 @@ public class ExamConfigLocalServiceClp implements ExamConfigLocalService {
     private MethodKey _setBeanIdentifierMethodKey16;
     private MethodKey _createExamConfigMethodKey17;
     private MethodKey _createExamConfigMethodKey18;
-    private MethodKey _updateExamConfigMethodKey19;
+    private MethodKey _rereadDefaultEvaluatorLogicMethodKey19;
+    private MethodKey _updateExamConfigMethodKey20;
 
     public ExamConfigLocalServiceClp(ClassLoaderProxy classLoaderProxy) {
         _classLoaderProxy = classLoaderProxy;
@@ -100,7 +101,10 @@ public class ExamConfigLocalServiceClp implements ExamConfigLocalService {
                 com.google.common.base.Optional.class,
                 com.google.common.base.Optional.class);
 
-        _updateExamConfigMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
+        _rereadDefaultEvaluatorLogicMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
+                "rereadDefaultEvaluatorLogic", java.lang.String.class);
+
+        _updateExamConfigMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
                 "updateExamConfig", long.class,
                 hu.advancedweb.lms.evaluation.ExamTest.class,
                 com.google.common.base.Optional.class,
@@ -590,6 +594,27 @@ public class ExamConfigLocalServiceClp implements ExamConfigLocalService {
         return (hu.advancedweb.model.ExamConfig) ClpSerializer.translateOutput(returnObj);
     }
 
+    public hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(
+        java.lang.String evaluatorJavascript) {
+        Object returnObj = null;
+
+        MethodHandler methodHandler = new MethodHandler(_rereadDefaultEvaluatorLogicMethodKey19,
+                ClpSerializer.translateInput(evaluatorJavascript));
+
+        try {
+            returnObj = _classLoaderProxy.invoke(methodHandler);
+        } catch (Throwable t) {
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return (hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic) ClpSerializer.translateOutput(returnObj);
+    }
+
     public hu.advancedweb.model.ExamConfig updateExamConfig(long id,
         hu.advancedweb.lms.evaluation.ExamTest test,
         com.google.common.base.Optional<java.lang.String> evaluator,
@@ -598,7 +623,7 @@ public class ExamConfigLocalServiceClp implements ExamConfigLocalService {
             com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
-        MethodHandler methodHandler = new MethodHandler(_updateExamConfigMethodKey19,
+        MethodHandler methodHandler = new MethodHandler(_updateExamConfigMethodKey20,
                 id, ClpSerializer.translateInput(test),
                 ClpSerializer.translateInput(evaluator),
                 ClpSerializer.translateInput(evaluatorLogic));

@@ -228,6 +228,9 @@ public interface ExamConfigLocalService extends PersistedModelLocalService {
         com.google.common.base.Optional<hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic> evaluatorLogic)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    public hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(
+        java.lang.String evaluatorJavascript);
+
     /**
     * Updates the config
     */

@@ -265,6 +265,11 @@ public class ExamConfigLocalServiceUtil {
             evaluatorLogic);
     }
 
+    public static hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(
+        java.lang.String evaluatorJavascript) {
+        return getService().rereadDefaultEvaluatorLogic(evaluatorJavascript);
+    }
+
     /**
     * Updates the config
     */

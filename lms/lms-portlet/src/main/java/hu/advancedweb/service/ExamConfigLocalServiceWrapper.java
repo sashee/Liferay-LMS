@@ -254,6 +254,11 @@ public class ExamConfigLocalServiceWrapper implements ExamConfigLocalService,
             test, evaluator, evaluatorLogic);
     }
 
+    public hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic rereadDefaultEvaluatorLogic(
+        java.lang.String evaluatorJavascript) {
+        return _examConfigLocalService.rereadDefaultEvaluatorLogic(evaluatorJavascript);
+    }
+
     /**
     * Updates the config
     */
