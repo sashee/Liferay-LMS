@@ -137,15 +137,7 @@ public class ExamPortlet extends MVCPortlet {
     	if (evaluatorJavascript == null) {
     		return null;
     	} else {
-    		System.out.println("Called with: " + evaluatorJavascript);
-        	DefaultExamEvaluatorLogic evamEvaluator = ExamConfigLocalServiceUtil.rereadDefaultEvaluatorLogic(evaluatorJavascript);
-        	
-        	if (evamEvaluator == null) {
-        		System.out.println("Parsed: NULL");
-        	} else {
-        		System.out.println("Parsed: " + evamEvaluator.toJson());
-        	}
-        	return evamEvaluator;
+    		return ExamConfigLocalServiceUtil.rereadDefaultEvaluatorLogic(evaluatorJavascript);
     	}
     }
     
