@@ -1,5 +1,6 @@
 package hu.advancedweb.lms.portlet;
 
+import hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic;
 import hu.advancedweb.lms.evaluation.ExamAnswers;
 import hu.advancedweb.lms.evaluation.ExamTest;
 import hu.advancedweb.lms.evaluation.ExamValidationResult;
@@ -7,9 +8,6 @@ import hu.advancedweb.model.ExamConfig;
 import hu.advancedweb.service.ExamAnswerLocalServiceUtil;
 import hu.advancedweb.service.ExamConfigLocalServiceUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -133,6 +131,22 @@ public class ExamPortlet extends MVCPortlet {
 			}
 			UserLocalServiceUtil.addRoleUsers(existing.getPrimaryKey(), new long[] { user.getPrimaryKey() });
         }
+    }
+    
+    public static DefaultExamEvaluatorLogic getGeneratedEvaluationData(String evaluatorJavascript) {
+    	if (evaluatorJavascript == null) {
+    		return null;
+    	} else {
+    		System.out.println("Called with: " + evaluatorJavascript);
+        	DefaultExamEvaluatorLogic evamEvaluator = ExamConfigLocalServiceUtil.rereadDefaultEvaluatorLogic(evaluatorJavascript);
+        	
+        	if (evamEvaluator == null) {
+        		System.out.println("Parsed: NULL");
+        	} else {
+        		System.out.println("Parsed: " + evamEvaluator.toJson());
+        	}
+        	return evamEvaluator;
+    	}
     }
     
     /**

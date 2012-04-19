@@ -22,26 +22,38 @@
 
 	<%
 		int parentPageIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_PAGEINDEX))); 
-			int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
-			int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX));
+		int questionIndex = ParamUtil.getInteger(renderRequest, "index", GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX))); 
+		int questionIndexParam = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONINDEX));
 
-			if (questionIndexParam != 0) {
-		questionIndex = questionIndexParam;
-			}
+		if (questionIndexParam != 0) {
+			questionIndex = questionIndexParam;
+		}
 			
-			if (request.getAttribute(JspConstants.RA_PAGE_INDEX) != null && !((String)request.getAttribute(JspConstants.RA_PAGE_INDEX)).isEmpty()) {
-		parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_PAGE_INDEX));
-			}
+		if (request.getAttribute(JspConstants.RA_PAGE_INDEX) != null && !((String)request.getAttribute(JspConstants.RA_PAGE_INDEX)).isEmpty()) {
+			parentPageIndex = GetterUtil.getInteger((String)request.getAttribute(JspConstants.RA_PAGE_INDEX));
+		}
 			
-			List<String> questionData = (List<String>)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONDATA);
-			if (questionData == null) {
-		questionData = new ArrayList<String>();
-		questionData.add("");
-		questionData.add("");
-		questionData.add("");
-		questionData.add("");
+		List<String> questionData = (List<String>)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_QUESTIONDATA);
+		if (questionData == null) {
+			questionData = new ArrayList<String>();
+			questionData.add("");
+			questionData.add("");
+			questionData.add("");
+			questionData.add("");
+		}
+		
+		DefaultExamEvaluatorLogic reparsedEvaluationLogic = (DefaultExamEvaluatorLogic)request.getAttribute(JspConstants.RA_REREAD_EVALUATION_LOGIC);
+		
+		String parsedCorrectAnswer = "";
+		int parsedScore = 0;
+		if (reparsedEvaluationLogic != null) {
+			if (reparsedEvaluationLogic.correctAnswers.get(parentPageIndex + "") != null) {
+				if (reparsedEvaluationLogic.correctAnswers.get(parentPageIndex + "").get(questionIndex + "") != null) {
+					parsedCorrectAnswer = reparsedEvaluationLogic.correctAnswers.get(parentPageIndex + "").get(questionIndex + "").getValue0();
+					parsedScore = reparsedEvaluationLogic.correctAnswers.get(parentPageIndex + "").get(questionIndex + "").getValue1();
+				}
 			}
-			
+		}
 	// 		String fieldIdSuffix = "_p" + parentPageIndex + "_q" + questionIndex;
 	%>
 
@@ -66,8 +78,8 @@
 					<aui:option selected='<%= questionData.get(0).equals("checkbox") %>' value="checkbox"><liferay-ui:message key="checkbox" /></aui:option>
 					<aui:option selected='<%= questionData.get(0).equals("radio") %>' value="radio"><liferay-ui:message key="radio" /></aui:option>
 				</aui:select>
-				<aui:input label="exam-question-answer" name='<%= JspConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="" />
-				<aui:input type="number" min="0" max="100" label="exam-question-point" name='<%= JspConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>' value="" />
+				<aui:input label="exam-question-answer" name='<%= JspConstants.getQuestionAnswerName(parentPageIndex, questionIndex) %>' type="text" value="<%= parsedCorrectAnswer %>" />
+				<aui:input label="exam-question-point"  name='<%= JspConstants.getQuestionScoreName(parentPageIndex, questionIndex) %>'  type="text" value="<%= parsedScore %>" />
 				<div style="clear: both;"></div>
 			</div>
 		

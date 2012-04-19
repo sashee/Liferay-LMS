@@ -21,6 +21,8 @@ public class JspConstants {
 	public static final String RA_CONFIGURATION_SELECTED_EXAM_CONFIG = "lms-selected-exam-config";
 	public static final String RA_CONFIGURATION_SELECTED_EXAM_TEST = "lms-selected-exam-test";
 	
+	public static final String RA_REREAD_EVALUATION_LOGIC = "lms-reread-evaluation-logic";
+	
 	public static final String PREFERENCE_EXAMID = "examconfigid";
 	
 	public static final String QP_EXAM_CONFIG_ID = "exam_config_id";

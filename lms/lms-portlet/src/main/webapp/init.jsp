@@ -61,6 +61,7 @@
 <%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult.PageValidationResult" %>
 <%@ page import="hu.advancedweb.lms.evaluation.ExamValidationResult.ExerciseValidationResult" %>
+<%@ page import="hu.advancedweb.lms.evaluation.DefaultExamEvaluatorLogic" %>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />

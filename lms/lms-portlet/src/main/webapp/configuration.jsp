@@ -21,6 +21,13 @@
 <liferay-portlet:renderURL portletConfiguration="true" var="redirectAfterUrl" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 </liferay-portlet:renderURL>
 
+<%
+	// reread generated evaluation logic
+	String evaluatorScript = (String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
+	DefaultExamEvaluatorLogic defaultLogic = ExamPortlet.getGeneratedEvaluationData(evaluatorScript);
+	request.setAttribute(JspConstants.RA_REREAD_EVALUATION_LOGIC, defaultLogic);
+%>
+
 <aui:form action="<%= configurationURL %>" method="post" name="fm" cssClass="lmsConfiguration">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= JspConstants.CMD_UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirectAfterUrl %>" />
@@ -30,7 +37,7 @@
 	<%
 		long examConfigId = GetterUtil.getLong(request.getAttribute(JspConstants.RA_CONFIGURATION_SELECTED_EXAM_CONFIG));
 	%>
-		
+	
 	<aui:option selected='<%= examConfigId == -1 %>' value="-1"><liferay-ui:message key="new-exam" /></aui:option>
 		
 	<%
@@ -99,10 +106,16 @@
 	<aui:button-row>
 		<%
 			String jsFunct = renderResponse.getNamespace() + "changeScriptBoxVisibility(this.checked);";
-			String evaluatorScript = (String)request.getAttribute(JspConstants.RA_CONFIGURATION_JSP_EVALUATORSCRIPT);
+			String codeTextBoxStyle = "";
 		%>
-		<aui:input type="checkbox" name="<%= JspConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
-		<div id="<portlet:namespace/>evaluation_logic_script" style="display:none;" class="scriptContainer">
+		
+		<% if (defaultLogic != null) { %>
+			<aui:input type="checkbox" name="<%= JspConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" checked="true" onClick="<%= jsFunct %>"/>
+			<% codeTextBoxStyle = "display:none;"; %>
+		<% } else { %>
+		 	<aui:input type="checkbox" name="<%= JspConstants.QP_GENERATE_EVALUATOR_LOGIC %>" label="exam-autogenerate-code" onClick="<%= jsFunct %>"/>
+		<% } %>
+		<div id="<portlet:namespace/>evaluation_logic_script" style="<%= codeTextBoxStyle %>" class="scriptContainer">
 			<aui:input type="textarea" name="<%= JspConstants.QP_GENERATE_EVALUATOR_SCRIPT %>" label="exam-code" value="<%= evaluatorScript %>" />
 		</div>
 		<aui:button type="submit" value="exam-save" /> 
