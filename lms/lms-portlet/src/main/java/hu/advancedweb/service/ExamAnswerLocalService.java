@@ -260,4 +260,11 @@ public interface ExamAnswerLocalService extends PersistedModelLocalService {
         long companyId, long groupId, long userId, long examConfigId)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException;
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public boolean hasConfigBeenAnswered(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException;
+
+    public void deleteAnswers(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException;
 }

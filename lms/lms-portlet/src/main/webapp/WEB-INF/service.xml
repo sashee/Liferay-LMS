@@ -50,5 +50,8 @@
 			<finder-column name="userId" />
 			<finder-column name="examConfigId" />
 		</finder>
+		<finder name="ExamConfigId" return-type="Collection">
+			<finder-column name="examConfigId" />
+		</finder>
 	</entity>
 </service-builder>

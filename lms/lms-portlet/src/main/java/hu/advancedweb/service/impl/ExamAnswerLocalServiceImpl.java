@@ -181,4 +181,16 @@ public class ExamAnswerLocalServiceImpl extends ExamAnswerLocalServiceBaseImpl {
 
 		return null;
 	}
+
+	public boolean hasConfigBeenAnswered(long examConfigId) throws SystemException {
+		return examAnswerPersistence.findByExamConfigId(examConfigId).isEmpty() == false;
+	}
+
+	public void deleteAnswers(long examConfigId) throws SystemException {
+		try {
+			examAnswerPersistence.removeByExamConfigId(examConfigId);
+		} finally {
+			examAnswerPersistence.clearCache();// TODO:workaround
+		}
+	}
 }

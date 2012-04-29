@@ -296,6 +296,16 @@ public class ExamAnswerLocalServiceWrapper implements ExamAnswerLocalService,
             examConfigId);
     }
 
+    public boolean hasConfigBeenAnswered(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return _examAnswerLocalService.hasConfigBeenAnswered(examConfigId);
+    }
+
+    public void deleteAnswers(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        _examAnswerLocalService.deleteAnswers(examConfigId);
+    }
+
     /**
      * @deprecated Renamed to {@link #getWrappedService}
      */

@@ -30,6 +30,8 @@ public class ExamAnswerLocalServiceClp implements ExamAnswerLocalService {
     private MethodKey _isPageAnsweredMethodKey20;
     private MethodKey _getExamAnswersMethodKey21;
     private MethodKey _evaluateMethodKey22;
+    private MethodKey _hasConfigBeenAnsweredMethodKey23;
+    private MethodKey _deleteAnswersMethodKey24;
 
     public ExamAnswerLocalServiceClp(ClassLoaderProxy classLoaderProxy) {
         _classLoaderProxy = classLoaderProxy;
@@ -114,6 +116,12 @@ public class ExamAnswerLocalServiceClp implements ExamAnswerLocalService {
 
         _evaluateMethodKey22 = new MethodKey(_classLoaderProxy.getClassName(),
                 "evaluate", long.class, long.class, long.class, long.class);
+
+        _hasConfigBeenAnsweredMethodKey23 = new MethodKey(_classLoaderProxy.getClassName(),
+                "hasConfigBeenAnswered", long.class);
+
+        _deleteAnswersMethodKey24 = new MethodKey(_classLoaderProxy.getClassName(),
+                "deleteAnswers", long.class);
     }
 
     public hu.advancedweb.model.ExamAnswer addExamAnswer(
@@ -706,6 +714,52 @@ public class ExamAnswerLocalServiceClp implements ExamAnswerLocalService {
         }
 
         return (hu.advancedweb.lms.evaluation.ExamValidationResult) ClpSerializer.translateOutput(returnObj);
+    }
+
+    public boolean hasConfigBeenAnswered(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        Object returnObj = null;
+
+        MethodHandler methodHandler = new MethodHandler(_hasConfigBeenAnsweredMethodKey23,
+                examConfigId);
+
+        try {
+            returnObj = _classLoaderProxy.invoke(methodHandler);
+        } catch (Throwable t) {
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return ((Boolean) returnObj).booleanValue();
+    }
+
+    public void deleteAnswers(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        MethodHandler methodHandler = new MethodHandler(_deleteAnswersMethodKey24,
+                examConfigId);
+
+        try {
+            _classLoaderProxy.invoke(methodHandler);
+        } catch (Throwable t) {
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
     }
 
     public ClassLoaderProxy getClassLoaderProxy() {

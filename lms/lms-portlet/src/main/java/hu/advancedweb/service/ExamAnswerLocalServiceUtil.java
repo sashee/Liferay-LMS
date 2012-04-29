@@ -307,6 +307,16 @@ public class ExamAnswerLocalServiceUtil {
         return getService().evaluate(companyId, groupId, userId, examConfigId);
     }
 
+    public static boolean hasConfigBeenAnswered(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getService().hasConfigBeenAnswered(examConfigId);
+    }
+
+    public static void deleteAnswers(long examConfigId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        getService().deleteAnswers(examConfigId);
+    }
+
     public static void clearService() {
         _service = null;
     }
