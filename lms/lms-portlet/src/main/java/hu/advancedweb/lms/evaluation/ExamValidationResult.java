@@ -10,7 +10,7 @@ public class ExamValidationResult {
 
 	public Map<String, PageValidationResult>	pageValidations	= Maps.newHashMap();
 	
-	public void addExerciseResult(String page, String exercise, String text, int score) {
+	public void addExerciseResult(String page, String exercise, String text, int score, int maxScore) {
 		if (pageValidations.containsKey(page) == false) {
 			pageValidations.put(page, new PageValidationResult());
 		}
@@ -19,6 +19,7 @@ public class ExamValidationResult {
 		}
 		pageValidations.get(page).exerciseValidations.get(exercise).text = text;
 		pageValidations.get(page).exerciseValidations.get(exercise).score = score;
+		pageValidations.get(page).exerciseValidations.get(exercise).maxScore = maxScore;
 	}
 
 	public void setPageScore(String page, int score) {
@@ -51,10 +52,13 @@ public class ExamValidationResult {
 
 		public int		score;
 
+		public int		maxScore;
+
 		@Override
 		public String toString() {
-			return "ExerciseValidationResult [text=" + text + ", score=" + score + "]";
+			return "ExerciseValidationResult [text=" + text + ", score=" + score + ", maxScore=" + maxScore + "]";
 		}
+
 	}
 
 	@Override
